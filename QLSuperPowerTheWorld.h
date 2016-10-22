@@ -44,6 +44,12 @@ public:
     UFUNCTION()
     void HaloCallback(float Val);
 
+    void StopTime();
+    void ResumeTime();
+
 protected:
     bool bIsExecutingTheWorld;
+    float FreezingPeriod;
+    float TimeDilutionFactor;
+    FTimerHandle TimerHandle;
 };

@@ -33,7 +33,10 @@ AQLSuperPowerTheWorld::AQLSuperPowerTheWorld()
     }
     HaloTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("HaloTimeline"));
     HaloTimelineInterpFunction.BindUFunction(this, FName{ TEXT("HaloCallback") });
-    bIsExecutingTheWorld = true;
+
+    bIsExecutingTheWorld = false;
+    FreezingPeriod = 10.0f;
+    TimeDilutionFactor = 1e-2f; //1e-4f;
 }
 
 //------------------------------------------------------------
@@ -62,23 +65,27 @@ void AQLSuperPowerTheWorld::Tick( float DeltaTime )
 }
 
 //------------------------------------------------------------
+// There seems to be a bug of engine: setting custom time dilation
+// for AQLSuperPowerTheWorld() will curiously cause loss of timeline.
+// This bug is only observed when ExecuteSuperPower() is called the
+// first time. Subsequent calls are immune to this bug.
 //------------------------------------------------------------
 void AQLSuperPowerTheWorld::ExecuteSuperPower()
 {
-    // apply sound
-    PlaySoundComponent("ExecuteTheWorld");
-
-    const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
-
-    if (SuperPowerOwner)
+    if (bIsExecutingTheWorld == false)
     {
-        UMaterialInstanceDynamic* Material = SuperPowerOwner->GetSuperPowerTheWorldDynamicMaterial();
-        if (Material)
-        {
-            Material->SetScalarParameterValue("ViewPortWidth", ViewportSize.X);
-            Material->SetScalarParameterValue("ViewPortHeight", ViewportSize.Y);
+        // apply sound
+        PlaySoundComponent("ExecuteTheWorld");
 
-            HaloTimeline->PlayFromStart();
+        if (SuperPowerOwner)
+        {
+            // stop time
+            StopTime();
+
+            // after freezing period, resume time
+            // note that Timer always follows global time dilation, so to freeze time k seconds,
+            // the delay parameter should be set to (k * global time dilation)
+            GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AQLSuperPowerTheWorld::ResumeTime, 1.0f, false, FreezingPeriod * TimeDilutionFactor);
         }
     }
 }
@@ -95,4 +102,43 @@ void AQLSuperPowerTheWorld::HaloCallback(float Val)
             Material->SetScalarParameterValue("RadiusScaleFactor", Val);
         }
     }
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+void AQLSuperPowerTheWorld::StopTime()
+{
+    // toggle flag
+    bIsExecutingTheWorld = true;
+
+    UMaterialInstanceDynamic* Material = SuperPowerOwner->GetSuperPowerTheWorldDynamicMaterial();
+    if (Material)
+    {
+        // change time dilution
+        UGameplayStatics::SetGlobalTimeDilation(GetWorld(), TimeDilutionFactor);
+        SuperPowerOwner->CustomTimeDilation = 1.0f / TimeDilutionFactor;
+        SuperPowerOwner->GetController()->CustomTimeDilation = 1.0f / TimeDilutionFactor;
+        //this->CustomTimeDilation = 1.0f / TimeDilutionFactor;
+
+        // the world halo visual effect
+        const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+        Material->SetScalarParameterValue("ViewPortWidth", ViewportSize.X);
+        Material->SetScalarParameterValue("ViewPortHeight", ViewportSize.Y);
+
+        HaloTimeline->PlayFromStart();
+    }
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+void AQLSuperPowerTheWorld::ResumeTime()
+{
+    // change time dilution
+    UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
+    SuperPowerOwner->CustomTimeDilation = 1.0f;
+    SuperPowerOwner->GetController()->CustomTimeDilation = 1.0f;
+    this->CustomTimeDilation = 1.0f;
+
+    // toggle flag
+    bIsExecutingTheWorld = false;
 }
