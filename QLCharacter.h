@@ -14,6 +14,7 @@
 #include "QLDebugHelper.h"
 #include "QLWeaponGravityGun.h"
 #include "QLWeaponPortalGun.h"
+#include "QLSuperPowerTheWorld.h"
 #include "GameFramework/Character.h"
 #include "QLCharacter.generated.h"
 
@@ -28,8 +29,12 @@ class QL_API AQLCharacter : public ACharacter
     GENERATED_BODY()
 
 public:
-    bool IsEquipped(const FName& Name);
+    bool IsWeaponEquipped(const FName& Name);
     void ChangeCurrentWeapon(AQLWeapon* Weapon);
+
+    bool IsSuperPowerEquipped(const FName& Name);
+    void ChangeCurrentSuperPower(AQLSuperPower* Weapon);
+
     void AddToInventory(AQLActor* QLActor);
     void RemoveFromInventory(AQLActor* QLActor);
     void ShowInventory();
@@ -37,7 +42,6 @@ public:
 
     AQLCharacter();
     ~AQLCharacter();
-
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
@@ -54,7 +58,7 @@ public:
     bool IsObjectNextToCharacter(AQLGravityGunCompatibleActor* ggcActor);
 
     // implementation makes sure this function can only be called once
-    void UnlockAllWeapon();
+    void UnlockAllWeaponAndSuperPower();
 
     // Handles input for moving forward and backward.
     UFUNCTION()
@@ -108,10 +112,16 @@ public:
     UFUNCTION()
     void SwitchToLastWeapon();
 
+    UFUNCTION()
+    void ExecuteSuperPower();
+
     void SwitchToWeapon(const FName& Name);
 
     void PickUpWeapon(AQLWeapon* Weapon);
     AQLWeapon* GetCurrentWeapon() const;
+    void PickUpSuperPower(AQLSuperPower* Weapon);
+    AQLSuperPower* GetCurrentSuperPower() const;
+
     UAudioComponent* CreateSoundComponent(USceneComponent*& RootComponent, const TCHAR* soundPath, const TCHAR* soundName);
     USoundWave* CreateFireAndForgetSoundWave(const TCHAR* SoundPath, const TCHAR* SoundName);
     void PlaySoundComponent(const FName& SoundName);
@@ -119,6 +129,9 @@ public:
 
     void Test();
     UPhysicsHandleComponent* PhysicsHandle;
+
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
+    UMaterialInstanceDynamic* GetSuperPowerTheWorldDynamicMaterial();
 
 protected:
     bool bIsFalling;
@@ -130,10 +143,12 @@ protected:
     float MaxWalkSpeed;
     float MaxWalkSpeedCrouched;
     int Health;
-    bool bAllWeaponUnlockable;
+    bool bAllWeaponAndSuperPowerUnlockable;
     AQLWeapon* CurrentWeapon;
     AQLWeapon* LastWeapon;
     TMap<FName, AQLWeapon*> WeaponList;
+    AQLSuperPower* CurrentSuperPower;
+    TMap<FName, AQLSuperPower*> SuperPowerList;
     TMap<FString, AActor*> Inventory;
     USoundAttenuation* SoundNoAttenuation;
     USoundAttenuation* SoundAttenuation;
@@ -141,4 +156,7 @@ protected:
     TMap<FName, USoundWave*> FireAndForgetSoundWaveList;
     UCameraComponent* QLCameraComponent;
     AQLDebugHelper* DebugHelper;
+
+    UMaterial* SuperPowerTheWorldMaterial;
+    UMaterialInstanceDynamic* SuperPowerTheWorldDynamicMaterial;
 };

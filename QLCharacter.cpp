@@ -21,7 +21,7 @@ AQLCharacter::AQLCharacter()
 
     bIsSprinting = false;
     bWantToSprint = false;
-    bAllWeaponUnlockable = true;
+    bAllWeaponAndSuperPowerUnlockable = true;
 
     // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
@@ -52,6 +52,10 @@ AQLCharacter::AQLCharacter()
     WeaponList.Add("NeutronAWP", nullptr);
     CurrentWeapon = nullptr;
     LastWeapon = nullptr;
+    CurrentSuperPower = nullptr;
+
+    // create all super power slots
+    SuperPowerList.Add("TheWorld", nullptr);
 
     // sound
     SoundNoAttenuation = CreateDefaultSubobject<USoundAttenuation>(TEXT("SoundNoAttenuation"));
@@ -62,6 +66,14 @@ AQLCharacter::AQLCharacter()
     SoundComponentList.Add("EquipWeapon", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/medshot4_from_hl2"), TEXT("SoundEquipWeaponComp")));
     SoundComponentList.Add("SwitchWeapon", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/swords_collide"), TEXT("SoundSwitchWeaponComp")));
     SoundComponentList.Add("DoubleJump", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/quake_jump"), TEXT("SoundDoubleJumpComp")));
+
+    // post-process
+    static ConstructorHelpers::FObjectFinder<UMaterial> SuperPowerTheWorldMaterialObj(TEXT("/Game/Materials/TheWorld/M_QLTheWorldHaloPP"));
+    if (SuperPowerTheWorldMaterialObj.Succeeded())
+    {
+        SuperPowerTheWorldMaterial = SuperPowerTheWorldMaterialObj.Object;
+    }
+    SuperPowerTheWorldDynamicMaterial = nullptr;
 }
 
 //------------------------------------------------------------
@@ -79,6 +91,8 @@ void AQLCharacter::BeginPlay()
     //DebugHelper = GetWorld()->SpawnActor<AQLDebugHelper>(AQLDebugHelper::StaticClass());
     //DebugHelper->AttachToComponent(QLCameraComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
     //DebugHelper->SetActorRelativeLocation(FVector(200.0f, 0.0f, 0.0f));
+
+    SuperPowerTheWorldDynamicMaterial = UMaterialInstanceDynamic::Create(SuperPowerTheWorldMaterial, this);
 }
 
 //------------------------------------------------------------
@@ -111,6 +125,7 @@ void AQLCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompone
     InputComponent->BindAction("Test", EInputEvent::IE_Pressed, this, &AQLCharacter::Test);
     InputComponent->BindAction("Inventory", EInputEvent::IE_Pressed, this, &AQLCharacter::ShowInventory);
     InputComponent->BindAction("Zoom", EInputEvent::IE_Pressed, this, &AQLCharacter::Zoom);
+    InputComponent->BindAction("ExecuteSuperPower", EInputEvent::IE_Pressed, this, &AQLCharacter::ExecuteSuperPower);
 
     // Set up "axis" bindings.
     InputComponent->BindAxis("MoveForward", this, &AQLCharacter::MoveForward);
@@ -305,7 +320,7 @@ void AQLCharacter::SwitchToNeutronAWP()
 void AQLCharacter::SwitchToWeapon(const FName& Name)
 {
     // check if the selected weapon is equipped
-    if (IsEquipped(Name))
+    if (IsWeaponEquipped(Name))
     {
         AQLWeapon* SelectedWeapon = WeaponList[Name];
         // first, unset all other equipped weapon except the selected weapon
@@ -327,6 +342,16 @@ void AQLCharacter::SwitchToWeapon(const FName& Name)
 void AQLCharacter::SwitchToLastWeapon()
 {
     ChangeCurrentWeapon(LastWeapon);
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+void AQLCharacter::ExecuteSuperPower()
+{
+    if (CurrentSuperPower)
+    {
+        CurrentSuperPower->ExecuteSuperPower();
+    }
 }
 
 //------------------------------------------------------------
@@ -381,15 +406,16 @@ bool AQLCharacter::IsObjectNextToCharacter(AQLGravityGunCompatibleActor* ggcActo
 // bAllWeaponUnlockable makes sure UnlockAllWeapon()
 // can only be called once per character life cycle
 //------------------------------------------------------------
-void AQLCharacter::UnlockAllWeapon()
+void AQLCharacter::UnlockAllWeaponAndSuperPower()
 {
-    if (bAllWeaponUnlockable)
+    if (bAllWeaponAndSuperPowerUnlockable)
     {
-        if (!IsEquipped("GravityGun"))
+        // weapon
+        if (!IsWeaponEquipped("GravityGun"))
         {
             PickUpWeapon(GetWorld()->SpawnActor<AQLWeaponGravityGun>(AQLWeaponGravityGun::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator));
         }
-        if (!IsEquipped("PortalGun"))
+        if (!IsWeaponEquipped("PortalGun"))
         {
             PickUpWeapon(GetWorld()->SpawnActor<AQLWeaponPortalGun>(AQLWeaponPortalGun::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator));
         }
@@ -398,7 +424,17 @@ void AQLCharacter::UnlockAllWeapon()
             CurrentWeapon = WeaponList["GravityGun"];
         }
 
-        bAllWeaponUnlockable = false;
+        // super power
+        if (!IsSuperPowerEquipped("TheWorld"))
+        {
+            PickUpSuperPower(GetWorld()->SpawnActor<AQLSuperPowerTheWorld>(AQLSuperPowerTheWorld::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator));
+        }
+        if (!CurrentSuperPower)
+        {
+            CurrentSuperPower = SuperPowerList["TheWorld"];
+        }
+
+        bAllWeaponAndSuperPowerUnlockable = false;
     }
 }
 
@@ -410,7 +446,7 @@ void AQLCharacter::PickUpWeapon(AQLWeapon* Weapon)
     if (Weapon)
     {
         // if the player does not have this weapon yet
-        if (!IsEquipped(Weapon->GetWeaponName()))
+        if (!IsWeaponEquipped(Weapon->GetWeaponName()))
         {
             WeaponList[Weapon->GetWeaponName()] = Weapon;
             ChangeCurrentWeapon(Weapon);
@@ -432,6 +468,36 @@ void AQLCharacter::PickUpWeapon(AQLWeapon* Weapon)
 AQLWeapon* AQLCharacter::GetCurrentWeapon() const
 {
     return CurrentWeapon;
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+void AQLCharacter::PickUpSuperPower(AQLSuperPower* SuperPower)
+{
+    // if the SuperPower exists
+    if (SuperPower)
+    {
+        // if the player does not have this SuperPower yet
+        if (!IsSuperPowerEquipped(SuperPower->GetSuperPowerName()))
+        {
+            SuperPowerList[SuperPower->GetSuperPowerName()] = SuperPower;
+            ChangeCurrentSuperPower(SuperPower);
+
+            // set logical ownership
+            SuperPower->SetQLOwner(this);
+            AddToInventory(SuperPower);
+
+            // physical attachment
+            SuperPower->AttachToActor(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
+        }
+    }
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+AQLSuperPower* AQLCharacter::GetCurrentSuperPower() const
+{
+    return CurrentSuperPower;
 }
 
 //------------------------------------------------------------
@@ -501,7 +567,7 @@ void AQLCharacter::ChangeCurrentWeapon(AQLWeapon* Weapon)
 // check if the specified type of weapon (identified by name)
 // is already equipped by the player
 //------------------------------------------------------------
-bool AQLCharacter::IsEquipped(const FName& Name)
+bool AQLCharacter::IsWeaponEquipped(const FName& Name)
 {
     // if the given name exists in the preset list
     if (WeaponList.Contains(Name))
@@ -518,7 +584,47 @@ bool AQLCharacter::IsEquipped(const FName& Name)
     }
     else
     {
-        QLUtility::QLSay("AQLCharacter::IsEquipped(): unknown weapon type.");
+        QLUtility::QLSay("AQLCharacter::IsWeaponEquipped(): unknown weapon type.");
+        return false;
+    }
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+void AQLCharacter::ChangeCurrentSuperPower(AQLSuperPower* SuperPower)
+{
+    // if the target weapon exists
+    // note that the current weapon is allowed to be nonexistent
+    if (SuperPower != nullptr)
+    {
+        // if the target weapon is not the same with the current weapon
+        if (CurrentSuperPower != SuperPower)
+        {
+            CurrentSuperPower = SuperPower;
+        }
+    }
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+bool AQLCharacter::IsSuperPowerEquipped(const FName& Name)
+{
+    // if the given name exists in the preset list
+    if (SuperPowerList.Contains(Name))
+    {
+        // if the player has that type of weapon
+        if (SuperPowerList[Name] != nullptr)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        QLUtility::QLSay("AQLCharacter::IsSuperPowerEquipped(): unknown weapon type.");
         return false;
     }
 }
@@ -618,5 +724,12 @@ void AQLCharacter::Test()
     //QLUtility::QLSayLong("character = " + this->GetName());
     //QLUtility::QLSayLong("play controller = " + this->GetController()->GetName());
 
-    UnlockAllWeapon();
+    UnlockAllWeaponAndSuperPower();
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+UMaterialInstanceDynamic* AQLCharacter::GetSuperPowerTheWorldDynamicMaterial()
+{
+    return SuperPowerTheWorldDynamicMaterial;
 }
