@@ -23,7 +23,8 @@ AQLSuperPowerTheWorld::AQLSuperPowerTheWorld()
     PrimaryActorTick.bCanEverTick = true;
 
     // sound
-    SoundComponentList.Add("ExecuteTheWorld", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/za_warudo"), TEXT("SoundComp")));
+    SoundComponentList.Add("ExecuteTheWorld", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/za_warudo"), TEXT("SoundCompExecuteTheWorld")));
+    SoundComponentList.Add("Expire", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/expire"), TEXT("SoundCompExpire")));
 
     // halo
     static ConstructorHelpers::FObjectFinder<UCurveFloat> FCurveObj(TEXT("/Game/Materials/TheWorld/C_QLTheWorldHaloCurve"));
@@ -139,6 +140,9 @@ void AQLSuperPowerTheWorld::ResumeTime()
     SuperPowerOwner->CustomTimeDilation = 1.0f;
     SuperPowerOwner->GetController()->CustomTimeDilation = 1.0f;
     this->CustomTimeDilation = 1.0f;
+
+    // apply sound
+    PlaySoundComponent("Expire");
 
     // toggle flag
     bIsExecutingTheWorld = false;

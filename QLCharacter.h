@@ -119,7 +119,10 @@ public:
 
     void PickUpWeapon(AQLWeapon* Weapon);
     AQLWeapon* GetCurrentWeapon() const;
-    void PickUpSuperPower(AQLSuperPower* Weapon);
+
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
+    void PickUpSuperPower(AQLSuperPower* SuperPower);
+
     AQLSuperPower* GetCurrentSuperPower() const;
 
     UAudioComponent* CreateSoundComponent(USceneComponent*& RootComponent, const TCHAR* soundPath, const TCHAR* soundName);
