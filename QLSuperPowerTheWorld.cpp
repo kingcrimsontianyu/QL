@@ -37,7 +37,7 @@ AQLSuperPowerTheWorld::AQLSuperPowerTheWorld()
 
     bIsExecutingTheWorld = false;
     FreezingPeriod = 10.0f;
-    TimeDilutionFactor = 1e-4f;
+    TimeDilationFactor = 1e-4f;
 
     HackTotalTimer = 0.0f;
 }
@@ -84,7 +84,7 @@ void AQLSuperPowerTheWorld::ExecuteSuperPower()
             // after freezing period, resume time
             // note that Timer always follows global time dilation, so to freeze time k seconds,
             // the delay parameter should be set to (k * global time dilation)
-            GetWorld()->GetTimerManager().SetTimer(TheWorldTimerHandle, this, &AQLSuperPowerTheWorld::ResumeTime, 1.0f, false, FreezingPeriod * TimeDilutionFactor);
+            GetWorld()->GetTimerManager().SetTimer(TheWorldTimerHandle, this, &AQLSuperPowerTheWorld::ResumeTime, 1.0f, false, FreezingPeriod * TimeDilationFactor);
         }
     }
 }
@@ -113,13 +113,13 @@ void AQLSuperPowerTheWorld::StopTime()
     UMaterialInstanceDynamic* Material = SuperPowerOwner->GetSuperPowerTheWorldDynamicMaterial();
     if (Material)
     {
-        // change global time dilution
-        UGameplayStatics::SetGlobalTimeDilation(GetWorld(), TimeDilutionFactor);
+        // change global time dilation
+        UGameplayStatics::SetGlobalTimeDilation(GetWorld(), TimeDilationFactor);
 
         // actors exempt from this super power
-        SuperPowerOwner->CustomTimeDilation = 1.0f / TimeDilutionFactor;
-        SuperPowerOwner->GetController()->CustomTimeDilation = 1.0f / TimeDilutionFactor;
-        this->CustomTimeDilation = 1.0f / TimeDilutionFactor;
+        SuperPowerOwner->CustomTimeDilation = 1.0f / TimeDilationFactor;
+        SuperPowerOwner->GetController()->CustomTimeDilation = 1.0f / TimeDilationFactor;
+        this->CustomTimeDilation = 1.0f / TimeDilationFactor;
 
         // the world halo visual effect
         const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
@@ -127,7 +127,7 @@ void AQLSuperPowerTheWorld::StopTime()
         Material->SetScalarParameterValue("ViewPortHeight", ViewportSize.Y);
 
         // to avoid the large spike of DeltaTime, here we delay 0.1 second and then display halo
-        GetWorld()->GetTimerManager().SetTimer(DelayTimerHandle, this, &AQLSuperPowerTheWorld::PlayHaloTimeline, 1.0f, false, 0.1f * TimeDilutionFactor);
+        GetWorld()->GetTimerManager().SetTimer(DelayTimerHandle, this, &AQLSuperPowerTheWorld::PlayHaloTimeline, 1.0f, false, 0.1f * TimeDilationFactor);
     }
 }
 
@@ -135,7 +135,7 @@ void AQLSuperPowerTheWorld::StopTime()
 //------------------------------------------------------------
 void AQLSuperPowerTheWorld::ResumeTime()
 {
-    // change time dilution
+    // change time dilation
     UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.0f);
     SuperPowerOwner->CustomTimeDilation = 1.0f;
     SuperPowerOwner->GetController()->CustomTimeDilation = 1.0f;

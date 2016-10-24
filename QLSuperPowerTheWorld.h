@@ -72,7 +72,7 @@ public:
 protected:
     bool bIsExecutingTheWorld;
     float FreezingPeriod;
-    float TimeDilutionFactor;
+    float TimeDilationFactor;
     FTimerHandle TheWorldTimerHandle;
     FTimerHandle DelayTimerHandle;
     float HackTotalTimer;
