@@ -23,6 +23,8 @@ AQLCharacter::AQLCharacter()
     bWantToSprint = false;
     bAllWeaponAndSuperPowerUnlockable = true;
 
+    bCanChangeCurrentWeapon = true;
+
     // Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
 
@@ -68,7 +70,7 @@ AQLCharacter::AQLCharacter()
     SoundComponentList.Add("DoubleJump", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/quake_jump"), TEXT("SoundDoubleJumpComp")));
 
     // post-process
-    static ConstructorHelpers::FObjectFinder<UMaterial> SuperPowerTheWorldMaterialObj(TEXT("/Game/Materials/TheWorld/M_QLTheWorldHaloPP"));
+    static ConstructorHelpers::FObjectFinder<UMaterial> SuperPowerTheWorldMaterialObj(TEXT("/Game/Blueprints/SuperPower/TheWorld/Internal/M_QLTheWorldHaloPP"));
     if (SuperPowerTheWorldMaterialObj.Succeeded())
     {
         SuperPowerTheWorldMaterial = SuperPowerTheWorldMaterialObj.Object;
@@ -319,21 +321,25 @@ void AQLCharacter::SwitchToNeutronAWP()
 //------------------------------------------------------------
 void AQLCharacter::SwitchToWeapon(const FName& Name)
 {
-    // check if the selected weapon is equipped
-    if (IsWeaponEquipped(Name))
+    // check if weapon can be switched at this moment
+    if (bCanChangeCurrentWeapon)
     {
-        AQLWeapon* SelectedWeapon = WeaponList[Name];
-        // first, unset all other equipped weapon except the selected weapon
-        for (auto It = WeaponList.CreateIterator(); It; ++It)
+        // check if the selected weapon is equipped
+        if (IsWeaponEquipped(Name))
         {
-            if (It.Value() && It.Value() != SelectedWeapon)
+            AQLWeapon* SelectedWeapon = WeaponList[Name];
+            // first, unset all other equipped weapon except the selected weapon
+            for (auto It = WeaponList.CreateIterator(); It; ++It)
             {
-                It.Value()->ResetWeapon();
+                if (It.Value() && It.Value() != SelectedWeapon)
+                {
+                    It.Value()->ResetWeapon();
+                }
             }
-        }
 
-        // second, switch to the selected weapon
-        ChangeCurrentWeapon(SelectedWeapon);
+            // second, switch to the selected weapon
+            ChangeCurrentWeapon(SelectedWeapon);
+        }
     }
 }
 
@@ -341,7 +347,10 @@ void AQLCharacter::SwitchToWeapon(const FName& Name)
 //------------------------------------------------------------
 void AQLCharacter::SwitchToLastWeapon()
 {
-    ChangeCurrentWeapon(LastWeapon);
+    if (LastWeapon)
+    {
+        SwitchToWeapon(LastWeapon->GetWeaponName());
+    }
 }
 
 //------------------------------------------------------------

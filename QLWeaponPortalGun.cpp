@@ -17,10 +17,10 @@
 AQLWeaponPortalGun::AQLWeaponPortalGun()
 {
     Name = "PortalGun";
-    CrosshairTextureList.Add("BlueEmpty", CreateCrosshairTexture(TEXT("/Game/Textures/Crosshair/portal_gun_crosshair_blue_empty_processed")));
-    CrosshairTextureList.Add("BlueFilled", CreateCrosshairTexture(TEXT("/Game/Textures/Crosshair/portal_gun_crosshair_blue_filled_processed")));
-    CrosshairTextureList.Add("OrangeEmpty", CreateCrosshairTexture(TEXT("/Game/Textures/Crosshair/portal_gun_crosshair_orange_empty_processed")));
-    CrosshairTextureList.Add("OrangeFilled", CreateCrosshairTexture(TEXT("/Game/Textures/Crosshair/portal_gun_crosshair_orange_filled_processed")));
+    CrosshairTextureList.Add("BlueEmpty", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Crosshair/portal_gun_crosshair_blue_empty_processed")));
+    CrosshairTextureList.Add("BlueFilled", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Crosshair/portal_gun_crosshair_blue_filled_processed")));
+    CrosshairTextureList.Add("OrangeEmpty", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Crosshair/portal_gun_crosshair_orange_empty_processed")));
+    CrosshairTextureList.Add("OrangeFilled", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Crosshair/portal_gun_crosshair_orange_filled_processed")));
 
     InitializeCurrentCrosshairTexture("BlueEmpty");
     InitializeCurrentCrosshairTexture("OrangeEmpty");
@@ -34,7 +34,7 @@ AQLWeaponPortalGun::AQLWeaponPortalGun()
     OrangePortal = nullptr;
 
     // zoom
-    static ConstructorHelpers::FObjectFinder<UCurveFloat> FCurveObj(TEXT("/Game/Blueprints/C_QLZoomCurve"));
+    static ConstructorHelpers::FObjectFinder<UCurveFloat> FCurveObj(TEXT("/Game/Blueprints/Weapon/C_QLZoomCurve"));
     if (FCurveObj.Object)
     {
         FCurve = FCurveObj.Object;

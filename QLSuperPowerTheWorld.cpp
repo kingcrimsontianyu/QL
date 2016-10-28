@@ -27,7 +27,7 @@ AQLSuperPowerTheWorld::AQLSuperPowerTheWorld()
     SoundComponentList.Add("Expire", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/expire"), TEXT("SoundCompExpire")));
 
     // halo
-    static ConstructorHelpers::FObjectFinder<UCurveFloat> FCurveObj(TEXT("/Game/Materials/TheWorld/C_QLTheWorldHaloCurve"));
+    static ConstructorHelpers::FObjectFinder<UCurveFloat> FCurveObj(TEXT("/Game/Blueprints/SuperPower/TheWorld/Internal/C_QLTheWorldHaloCurve"));
     if (FCurveObj.Object)
     {
         FCurve = FCurveObj.Object;

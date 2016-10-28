@@ -33,6 +33,8 @@ public:
     void ChangeCurrentWeapon(AQLWeapon* Weapon);
 
     bool IsSuperPowerEquipped(const FName& Name);
+
+    bool bCanChangeCurrentWeapon;
     void ChangeCurrentSuperPower(AQLSuperPower* Weapon);
 
     void AddToInventory(AQLActor* QLActor);

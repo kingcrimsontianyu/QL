@@ -25,7 +25,7 @@ AQLWeaponGravityGun::AQLWeaponGravityGun()
     FixedIntervalAltFireHeldDown = 0.2f;
     ggcActor = nullptr;
 
-    CrosshairTextureList.Add("Regular", CreateCrosshairTexture(TEXT("/Game/Textures/Crosshair/gravity_gun_crosshair")));
+    CrosshairTextureList.Add("Regular", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/GravityGun/Crosshair/gravity_gun_crosshair")));
     InitializeCurrentCrosshairTexture("Regular");
 
     // sound
@@ -130,6 +130,7 @@ void AQLWeaponGravityGun::Fire()
 void AQLWeaponGravityGun::AltFire()
 {
     bIsAltFirePressed = true;
+    WeaponOwner->bCanChangeCurrentWeapon = false;
 
     // the actor is being held by the player
     if (bIsGravityGunCompatibleActorHeld)
@@ -244,6 +245,7 @@ void AQLWeaponGravityGun::AltFireReleased()
 {
     bIsAltFireHeldDown = false;
     bIsAltFirePressed = false;
+    WeaponOwner->bCanChangeCurrentWeapon = true;
 }
 
 //------------------------------------------------------------
@@ -262,7 +264,7 @@ void AQLWeaponGravityGun::AltFireRepeat()
 void AQLWeaponGravityGun::Tick(float DeltaSeconds)
 {
     // if the gravity gun has been owned by character
-    if (GetWeaponOwner())
+    if (WeaponOwner)
     {
         if (bIsAltFirePressed)
         {
@@ -342,6 +344,7 @@ void AQLWeaponGravityGun::ResetWeapon()
 
         bIsGravityGunCompatibleActorHeld = false;
         bIsAltFireHeldDown = false;
+        bIsAltFirePressed = false;
         RunningTimeAltFirePressed = 0.0f;
         FixedIntervalAltFirePressed = 0.2f;
         RunningTimeAltFireHeldDown = 0.0f;

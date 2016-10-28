@@ -73,8 +73,8 @@ AQLPortal::AQLPortal()
     // --- set the name of the texture sample as PortalTexture
     // --- set the texture sample's texture to render target
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    static ConstructorHelpers::FObjectFinder<UMaterial> BluePortalDefaultMaterialObj(TEXT("/Game/Materials/Portal/M_QLBluePortalInActive"));
-    static ConstructorHelpers::FObjectFinder<UMaterial> OrangePortalDefaultMaterialObj(TEXT("/Game/Materials/Portal/M_QLOrangePortalInActive"));
+    static ConstructorHelpers::FObjectFinder<UMaterial> BluePortalDefaultMaterialObj(TEXT("/Game/Blueprints/Weapon/PortalGun/Portal/M_QLBluePortalInActive"));
+    static ConstructorHelpers::FObjectFinder<UMaterial> OrangePortalDefaultMaterialObj(TEXT("/Game/Blueprints/Weapon/PortalGun/Portal/M_QLOrangePortalInActive"));
     if (BluePortalDefaultMaterialObj.Succeeded())
     {
         BluePortalDefaultMaterial = BluePortalDefaultMaterialObj.Object;
@@ -84,8 +84,8 @@ AQLPortal::AQLPortal()
         OrangePortalDefaultMaterial = OrangePortalDefaultMaterialObj.Object;
     }
 
-    static ConstructorHelpers::FObjectFinder<UMaterial> BluePortalMaterialObj(TEXT("/Game/Materials/Portal/M_QLBluePortalActive"));
-    static ConstructorHelpers::FObjectFinder<UMaterial> OrangePortalMaterialObj(TEXT("/Game/Materials/Portal/M_QLOrangePortalActive"));
+    static ConstructorHelpers::FObjectFinder<UMaterial> BluePortalMaterialObj(TEXT("/Game/Blueprints/Weapon/PortalGun/Portal/M_QLBluePortalActive"));
+    static ConstructorHelpers::FObjectFinder<UMaterial> OrangePortalMaterialObj(TEXT("/Game/Blueprints/Weapon/PortalGun/Portal/M_QLOrangePortalActive"));
     if (BluePortalMaterialObj.Succeeded())
     {
         BluePortalMaterial = BluePortalMaterialObj.Object;

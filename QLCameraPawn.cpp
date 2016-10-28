@@ -24,7 +24,7 @@ AQLCameraPawn::AQLCameraPawn()
 
     // spline
     CurrentSplineData = nullptr;
-    static ConstructorHelpers::FObjectFinder<UCurveFloat> FCurveObj(TEXT("/Game/Blueprints/C_QLMoveAlongSplineCurve"));
+    static ConstructorHelpers::FObjectFinder<UCurveFloat> FCurveObj(TEXT("/Game/Blueprints/PlayerUMG/C_QLMoveAlongSplineCurve"));
     if (FCurveObj.Object)
     {
         FCurve = FCurveObj.Object;
