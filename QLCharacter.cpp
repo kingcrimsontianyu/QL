@@ -140,18 +140,26 @@ void AQLCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompone
 //------------------------------------------------------------
 void AQLCharacter::MoveForward(float Value)
 {
-    // Find out which way is "forward" and record that the player wants to move that way.
-    FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-    AddMovementInput(Direction, Value);
+    if (Value != 0.0f)
+    {
+        // Find out which way is "forward" and record that the player wants to move that way.
+        FRotator Rotation = Controller->GetControlRotation();
+        const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::X);
+        AddMovementInput(Direction, Value);
+    }
 }
 
 //------------------------------------------------------------
 //------------------------------------------------------------
 void AQLCharacter::MoveRight(float Value)
 {
-    // Find out which way is "right" and record that the player wants to move that way.
-    FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
-    AddMovementInput(Direction, Value);
+    if (Value != 0.0f)
+    {
+        // Find out which way is "right" and record that the player wants to move that way.
+        FRotator Rotation = Controller->GetControlRotation();
+        const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Y);
+        AddMovementInput(Direction, Value);
+    }
 }
 
 //------------------------------------------------------------
