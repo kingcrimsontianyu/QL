@@ -16,6 +16,8 @@
 //------------------------------------------------------------
 AQLHealthPickUp::AQLHealthPickUp()
 {
+    Increment = 10.0f;
+
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
 
@@ -25,6 +27,9 @@ AQLHealthPickUp::AQLHealthPickUp()
     BoxComponent->SetSimulatePhysics(false);
     BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
     BoxComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
+
+    // sound
+    SoundComponentList.Add("Consume", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/bite"), TEXT("HealthPickUpConsume")));
 
     // built-in dynamic delegate
     this->OnActorBeginOverlap.AddDynamic(this, &AQLHealthPickUp::OnOverlapBeginForActor);
@@ -50,6 +55,25 @@ void AQLHealthPickUp::Tick( float DeltaTime )
 //------------------------------------------------------------
 void AQLHealthPickUp::OnOverlapBeginForActor(AActor* OverlappedActor, AActor* OtherActor)
 {
-    GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Cyan, FString(TEXT("overlap actor")));
-    this->Destroy();
+    AQLCharacter* character = Cast<AQLCharacter>(OtherActor);
+    if(character)
+    {
+        PlaySoundComponent("Consume");
+        character->IncrementHealth(Increment);
+        this->Destroy();
+    }
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+float AQLHealthPickUp::GetHealthIncrement()
+{
+    return Increment;
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+void AQLHealthPickUp::SetHealthIncrement(float Increment)
+{
+    this->Increment = Increment;
 }

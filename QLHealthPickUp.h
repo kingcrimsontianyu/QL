@@ -11,6 +11,7 @@
 #pragma once
 
 #include "QLActor.h"
+#include "QLCharacter.h"
 #include "QLHealthPickUp.generated.h"
 
 UCLASS()
@@ -30,4 +31,13 @@ public:
 
     UFUNCTION()
     void OnOverlapBeginForActor(AActor* OverlappedActor, AActor* OtherActor);
+
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
+    float GetHealthIncrement();
+
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
+    void SetHealthIncrement(float Increment);
+
+protected:
+    float Increment;
 };

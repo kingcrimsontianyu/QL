@@ -16,6 +16,10 @@
 //------------------------------------------------------------
 AQLCharacter::AQLCharacter()
 {
+    Health = 25.0f;
+    MaxHealth = 100.0f;
+    Chi = 30.0f;
+    MaxChi = 100.0f;
     bCanDoubleJump = false;
     bIsFalling = false;
 
@@ -749,4 +753,52 @@ void AQLCharacter::Test()
 UMaterialInstanceDynamic* AQLCharacter::GetSuperPowerTheWorldDynamicMaterial()
 {
     return SuperPowerTheWorldDynamicMaterial;
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+int AQLCharacter::GetHealthInt()
+{
+    return static_cast<int>(Health);
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+int AQLCharacter::GetChiInt()
+{
+    return static_cast<int>(Chi);
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+void AQLCharacter::IncrementHealth_Implementation(float increment)
+{
+    Health += increment;
+
+    if (Health > MaxHealth)
+    {
+        Health = MaxHealth;
+    }
+
+    if (Health <= 0.0f)
+    {
+        // to do: dead
+    }
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+void AQLCharacter::IncrementChi_Implementation(float increment)
+{
+    Chi += increment;
+
+    if (Chi > MaxChi)
+    {
+        Chi = MaxChi;
+    }
+
+    if (Chi <= 0.0f)
+    {
+        Chi = 0.0f;
+    }
 }

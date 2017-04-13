@@ -138,6 +138,18 @@ public:
     UFUNCTION(BlueprintCallable, Category = "C++Function")
     UMaterialInstanceDynamic* GetSuperPowerTheWorldDynamicMaterial();
 
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
+    int GetHealthInt();
+
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
+    int GetChiInt();
+
+    UFUNCTION(BlueprintNativeEvent, Category = "C++Function")
+    void IncrementHealth(float increment); // xxx_Implementation() version is automatically declared
+
+    UFUNCTION(BlueprintNativeEvent, Category = "C++Function")
+    void IncrementChi(float increment); // xxx_Implementation() version is automatically declared
+
 protected:
     bool bIsFalling;
     bool bCanDoubleJump;
@@ -147,7 +159,10 @@ protected:
     bool bWantToSprint; // player wants to spring
     float MaxWalkSpeed;
     float MaxWalkSpeedCrouched;
-    int Health;
+    float Health;
+    float MaxHealth;
+    float Chi;
+    float MaxChi;
     bool bAllWeaponAndSuperPowerUnlockable;
     AQLWeapon* CurrentWeapon;
     AQLWeapon* LastWeapon;
