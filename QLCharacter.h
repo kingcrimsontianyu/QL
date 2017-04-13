@@ -139,16 +139,16 @@ public:
     UMaterialInstanceDynamic* GetSuperPowerTheWorldDynamicMaterial();
 
     UFUNCTION(BlueprintCallable, Category = "C++Function")
-    int GetHealthInt();
+    float GetHealth();
 
     UFUNCTION(BlueprintCallable, Category = "C++Function")
-    int GetChiInt();
+    float GetChi();
 
     UFUNCTION(BlueprintNativeEvent, Category = "C++Function")
-    void IncrementHealth(float increment); // xxx_Implementation() version is automatically declared
+    bool IncrementHealth(float increment); // xxx_Implementation() version is automatically declared
 
     UFUNCTION(BlueprintNativeEvent, Category = "C++Function")
-    void IncrementChi(float increment); // xxx_Implementation() version is automatically declared
+    bool IncrementChi(float increment); // xxx_Implementation() version is automatically declared
 
 protected:
     bool bIsFalling;

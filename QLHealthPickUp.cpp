@@ -58,9 +58,12 @@ void AQLHealthPickUp::OnOverlapBeginForActor(AActor* OverlappedActor, AActor* Ot
     AQLCharacter* character = Cast<AQLCharacter>(OtherActor);
     if(character)
     {
-        PlaySoundFireAndForget("Consume", character->GetActorLocation());
-        character->IncrementHealth(Increment);
-        this->Destroy();
+        // increase health only when necessary
+        if (character->IncrementHealth(Increment))
+        {
+            PlaySoundFireAndForget("Consume", character->GetActorLocation());
+            this->Destroy();
+        }
     }
 }
 

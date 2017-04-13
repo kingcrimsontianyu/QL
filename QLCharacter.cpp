@@ -757,48 +757,69 @@ UMaterialInstanceDynamic* AQLCharacter::GetSuperPowerTheWorldDynamicMaterial()
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-int AQLCharacter::GetHealthInt()
+float AQLCharacter::GetHealth()
 {
-    return static_cast<int>(Health);
+    return Health;
 }
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-int AQLCharacter::GetChiInt()
+float AQLCharacter::GetChi()
 {
-    return static_cast<int>(Chi);
+    return Chi;
 }
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLCharacter::IncrementHealth_Implementation(float increment)
+bool AQLCharacter::IncrementHealth_Implementation(float increment)
 {
-    Health += increment;
-
-    if (Health > MaxHealth)
+    // if the player has already had full health
+    // or if the player is dead, do not change health
+    if (Health >= MaxHealth || Health <= 0.0f)
     {
-        Health = MaxHealth;
+        return false;
     }
-
-    if (Health <= 0.0f)
+    else
     {
-        // to do: dead
+        Health += increment;
+
+        if (Health > MaxHealth)
+        {
+            Health = MaxHealth;
+        }
+
+        if (Health <= 0.0f)
+        {
+            // to do: dead
+        }
+
+        return true;
     }
 }
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLCharacter::IncrementChi_Implementation(float increment)
+bool AQLCharacter::IncrementChi_Implementation(float increment)
 {
-    Chi += increment;
-
-    if (Chi > MaxChi)
+    // if the player has already had full Chi
+    if (Chi >= MaxChi || Chi < 0.0f)
     {
-        Chi = MaxChi;
+        return false;
     }
-
-    if (Chi <= 0.0f)
+    else
     {
-        Chi = 0.0f;
+        Chi += increment;
+
+        if (Chi > MaxChi)
+        {
+            Chi = MaxChi;
+        }
+
+        if (Chi <= 0.0f)
+        {
+            Chi = 0.0f;
+        }
+
+        return true;
     }
 }
