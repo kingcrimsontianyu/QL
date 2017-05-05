@@ -34,7 +34,7 @@ AQLCharacter::AQLCharacter()
 
     // movement
     GetCharacterMovement()->JumpZVelocity = 600.0f;
-    GetCharacterMovement()->AirControl = 1.0f;
+    GetCharacterMovement()->AirControl = 0.0f;
     GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
     MaxWalkSpeed = 600.0f;
     GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
@@ -757,16 +757,24 @@ UMaterialInstanceDynamic* AQLCharacter::GetSuperPowerTheWorldDynamicMaterial()
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-float AQLCharacter::GetHealth()
+float AQLCharacter::GetHealth() const
 {
     return Health;
 }
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-float AQLCharacter::GetChi()
+float AQLCharacter::GetChi() const
 {
     return Chi;
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+float AQLCharacter::GetVelocityLength() const
+{
+    FVector temp = GetVelocity();
+    return temp.Size();
 }
 
 //------------------------------------------------------------
