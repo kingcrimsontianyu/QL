@@ -53,18 +53,6 @@ AQLPortal::AQLPortal()
     PortalCameraComp->SetupAttachment(RootComponent);
     PortalCameraComp->SetRelativeLocation(FVector(-xDim + 0.2f, 0.0f, 0.0f));
 
-    // debugging purpose
-    //HelperStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HelperStaticMeshComponent"));
-    //const ConstructorHelpers::FObjectFinder<UStaticMesh> HelperStaticMeshObj(TEXT("/Game/StarterContent/Shapes/Shape_Cone"));
-    //HelperStaticMeshComponent->SetStaticMesh(HelperStaticMeshObj.Object);
-    //HelperStaticMeshComponent->SetSimulatePhysics(false);
-    //HelperStaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-    //HelperStaticMeshComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-    //HelperStaticMeshComponent->SetupAttachment(PortalCameraComp);
-    //HelperStaticMeshComponent->SetWorldScale3D(FVector(0.4f, 0.4f, 2.0f));
-    //HelperStaticMeshComponent->SetRelativeLocation(FVector(100.0f, 0.0f, 100.0f));
-    //HelperStaticMeshComponent->SetRelativeRotation(FRotator(-90.0f, 0.0f, 0.0f));
-
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // In order for scene capture and material instance dynamic
     // to work properly, it is critical to:
