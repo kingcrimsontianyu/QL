@@ -110,7 +110,7 @@ void AQLWeaponPortalGun::CreatePortal(EPortalType PortalType)
             Portal->SetQLOwner(this);
             // budge the portal so that it only overlaps the wall a wee bit
             // to allow decal display
-            location += (Portal->BoxComponent->GetUnscaledBoxExtent().X - 0.05f) * Hit.Normal;
+            location += (Portal->GetBoxComponent()->GetUnscaledBoxExtent().X - 0.05f) * Hit.Normal;
             Portal->SetActorLocation(location);
             Portal->SetActorRotation(rotation);
             UGameplayStatics::FinishSpawningActor(Portal, transform);

@@ -34,6 +34,8 @@ public:
 
     virtual void ExecuteSuperPower() {};
 
+    virtual void StopSuperPower() {};
+
     const FName& GetSuperPowerName() const;
 
     virtual void SetQLOwner(AActor* QLOwner) override;

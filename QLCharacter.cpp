@@ -58,10 +58,11 @@ AQLCharacter::AQLCharacter()
     WeaponList.Add("NeutronAWP", nullptr);
     CurrentWeapon = nullptr;
     LastWeapon = nullptr;
-    CurrentSuperPower = nullptr;
 
     // create all super power slots
     SuperPowerList.Add("TheWorld", nullptr);
+    SuperPowerList.Add("MimicMatter", nullptr);
+    CurrentSuperPower = nullptr;
 
     // sound
     SoundNoAttenuation = CreateDefaultSubobject<USoundAttenuation>(TEXT("SoundNoAttenuation"));
@@ -379,6 +380,14 @@ void AQLCharacter::ExecuteSuperPower()
 //------------------------------------------------------------
 FHitResult AQLCharacter::RayTraceFromCharacterPOV()
 {
+    const float rayTraceRange = 100000.0f;
+    return RayTraceFromCharacterPOV(rayTraceRange);
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+FHitResult AQLCharacter::RayTraceFromCharacterPOV(float rayTraceRange)
+{
     FCollisionQueryParams lineTraceParams = FCollisionQueryParams(FName(TEXT("lineTrace")), true, this);
     lineTraceParams.bTraceComplex = true;
     lineTraceParams.bTraceAsyncScene = true;
@@ -450,9 +459,14 @@ void AQLCharacter::UnlockAllWeaponAndSuperPower()
         {
             PickUpSuperPower(GetWorld()->SpawnActor<AQLSuperPowerTheWorld>(AQLSuperPowerTheWorld::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator));
         }
+        if (!IsSuperPowerEquipped("MimicMatter"))
+        {
+            PickUpSuperPower(GetWorld()->SpawnActor<AQLSuperPowerMimicMatter>(AQLSuperPowerMimicMatter::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator));
+        }
         if (!CurrentSuperPower)
         {
-            CurrentSuperPower = SuperPowerList["TheWorld"];
+            //CurrentSuperPower = SuperPowerList["TheWorld"];
+            CurrentSuperPower = SuperPowerList["MimicMatter"];
         }
 
         bAllWeaponAndSuperPowerUnlockable = false;

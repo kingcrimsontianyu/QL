@@ -25,23 +25,7 @@ AQLWeapon::AQLWeapon()
     bIsAltFireHeldDown = false;
     bIsAltFirePressed = false;
 
-    BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
-    BoxComponent->InitBoxExtent(FVector(10.0f));
-    BoxComponent->SetSimulatePhysics(false);
-    BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-    BoxComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-    RootComponent = BoxComponent;
-
-    //StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
-    //const ConstructorHelpers::FObjectFinder<UStaticMesh> StaticMeshObj(TEXT("/Game/StarterContent/Shapes/Shape_Cone"));
-    //StaticMeshComponent->SetStaticMesh(StaticMeshObj.Object);
-    //StaticMeshComponent->SetSimulatePhysics(false);
-    //StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-    //StaticMeshComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-    //StaticMeshComponent->SetupAttachment(RootComponent);
-    //StaticMeshComponent->SetWorldScale3D(FVector(1.0f));
-    //float zDim = StaticMeshComponent->Bounds.BoxExtent.Z; // note: extent refers to half of the side
-    //StaticMeshComponent->SetRelativeLocation(FVector(0.0f, 0.0f, -zDim));
+    RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
 
     // built-in dynamic delegate
     this->OnActorBeginOverlap.AddDynamic(this, &AQLWeapon::OnOverlapBeginForActor);

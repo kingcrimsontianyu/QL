@@ -20,6 +20,8 @@ AQLActor::AQLActor()
     PrimaryActorTick.bCanEverTick = true;
 
     QLOwner = nullptr;
+    StaticMeshComponent = nullptr;
+
     SoundNoAttenuation = CreateDefaultSubobject<USoundAttenuation>(TEXT("SoundNoAttenuation"));
     SoundNoAttenuation->Attenuation.bAttenuate = false;
 
@@ -127,4 +129,11 @@ USoundWave* AQLActor::CreateFireAndForgetSoundWave(const TCHAR* SoundPath, const
         QLUtility::QLSay(TEXT("CreateFireAndForgetSoundWave() failed."));
         return nullptr;
     }
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+UStaticMeshComponent*& AQLActor::GetStaticMeshComponent()
+{
+    return StaticMeshComponent;
 }

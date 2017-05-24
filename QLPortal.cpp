@@ -295,17 +295,14 @@ void AQLPortal::OnOverlapBeginForActor(AActor* OverlappedActor, AActor* OtherAct
                 if (QLActor->GetQLOwner() != PortalOwner->GetWeaponOwner())
                 {
                     // step 1 cont'd: change velocity
-                    // SetPhysicsLinearVelocity() can only be applied to the static mesh component
-                    // but in gravity gun compatible actors the static mesh does not have physics/collision
-                    // so instead AddImpulse() is applied here to the box component
                     // impulse (vector) = mass (scalar) x velocity change (vector)
-                    // ps: AddImpulse(velocity change, NAME_None, false) does not seem to work as expectecd
-                    FVector Impulse = QLActor->BoxComponent->GetMass() * (NewVelocity - Velocity);
+                    // ps: AddImpulse(velocity change, NAME_None, false) does not seem to work as expected
+                    FVector Impulse = QLActor->GetStaticMeshComponent()->GetMass() * (NewVelocity - Velocity);
 
                     // teleport
                     QLActor->TeleportTo(NewLocation, NewActorRotation);
 
-                    QLActor->BoxComponent->AddImpulse(Impulse);
+                    QLActor->GetStaticMeshComponent()->AddImpulse(Impulse);
                 }
             }
         }
@@ -481,4 +478,11 @@ void AQLPortal::UnsetPortal()
     }
 
     SetSpouse(nullptr);
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+UBoxComponent*& AQLPortal::GetBoxComponent()
+{
+    return BoxComponent;
 }

@@ -31,11 +31,13 @@ public:
     void PlaySoundComponent(const FName& SoundName);
     void PlaySoundFireAndForget(const FName& SoundName, const FVector& Location);
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Box component")
-    UBoxComponent* BoxComponent;
+    //UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Box component")
+    //UBoxComponent* BoxComponent;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Static mesh component")
     UStaticMeshComponent* StaticMeshComponent;
+
+    UStaticMeshComponent*& GetStaticMeshComponent();
 protected:
     AActor* QLOwner;
     USoundAttenuation* SoundNoAttenuation;

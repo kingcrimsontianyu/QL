@@ -47,7 +47,7 @@ void AQLWeaponGravityGun::Fire()
         // ggcActor is supposed to be non-null, but we check it just in case
         if (ggcActor)
         {
-            UBoxComponent* comp = ggcActor->BoxComponent;
+            UStaticMeshComponent* comp = ggcActor->GetStaticMeshComponent();
 
             // by design, the gravity gun compatible actor must have a component
             // here the component is checked for the sake of safety
@@ -92,7 +92,7 @@ void AQLWeaponGravityGun::Fire()
             ggcActor = Cast<AQLGravityGunCompatibleActor>(hitActor);
             if (ggcActor)
             {
-                UBoxComponent* comp = ggcActor->BoxComponent;
+                UStaticMeshComponent* comp = ggcActor->GetStaticMeshComponent();
 
                 // by design, the gravity gun compatible actor must have a component
                 // here the component is checked for the sake of safety
@@ -142,7 +142,7 @@ void AQLWeaponGravityGun::AltFire()
             // ggcActor is supposed to be non-null, but we check it just in case
             if (ggcActor)
             {
-                UBoxComponent* comp = ggcActor->BoxComponent;
+                UStaticMeshComponent* comp = ggcActor->GetStaticMeshComponent();
 
                 // by design, the gravity gun compatible actor must have a component
                 // here the component is checked for the sake of safety
@@ -180,7 +180,7 @@ void AQLWeaponGravityGun::AltFire()
             ggcActor = Cast<AQLGravityGunCompatibleActor>(hitActor);
             if (ggcActor)
             {
-                UBoxComponent* comp = ggcActor->BoxComponent;
+                UStaticMeshComponent* comp = ggcActor->GetStaticMeshComponent();
 
                 // by design, the gravity gun compatible actor must have a component
                 // here the component is checked for the sake of safety
@@ -322,7 +322,7 @@ void AQLWeaponGravityGun::ResetWeapon()
         // if ggcActor exists and it is being held
         if (ggcActor && bIsGravityGunCompatibleActorHeld)
         {
-            UBoxComponent* comp = ggcActor->BoxComponent;
+            UStaticMeshComponent* comp = ggcActor->GetStaticMeshComponent();
 
             // by design, the gravity gun compatible actor must have a component
             // here the component is checked for the sake of safety

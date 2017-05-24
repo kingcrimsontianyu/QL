@@ -59,7 +59,9 @@ public:
     void SetPortal(EPortalType PortalType, AQLPortal* Spouse);
     void UnsetPortal();
 
+    UBoxComponent*& GetBoxComponent();
 protected:
+    UBoxComponent* BoxComponent;
     EPortalType PortalType;
     AQLPortal* Spouse;
     AQLWeaponPortalGun* PortalOwner;

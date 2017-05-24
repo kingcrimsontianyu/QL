@@ -15,12 +15,12 @@
 #include "QLWeaponGravityGun.h"
 #include "QLWeaponPortalGun.h"
 #include "QLSuperPowerTheWorld.h"
+#include "QLSuperPowerMimicMatter.h"
 #include "GameFramework/Character.h"
 #include "QLCharacter.generated.h"
 
 // constant
 const int maxNumWeapon = 10;
-const float rayTraceRange = 100000.0f;
 const float nextToPlayerThreshold = 400.0f;
 
 UCLASS()
@@ -57,6 +57,9 @@ public:
     virtual void Falling() override;
 
     FHitResult RayTraceFromCharacterPOV();
+
+    FHitResult RayTraceFromCharacterPOV(float rayTraceRange);
+
     bool IsObjectNextToCharacter(AQLGravityGunCompatibleActor* ggcActor);
 
     // implementation makes sure this function can only be called once

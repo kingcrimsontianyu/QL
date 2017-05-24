@@ -9,26 +9,21 @@
 //----------------------------------------
 
 #include "QL.h"
-#include "QLSuperPower.h"
-#include "QLCharacter.h"
+#include "QLPawn.h"
 
 //------------------------------------------------------------
 // Sets default values
 //------------------------------------------------------------
-AQLSuperPower::AQLSuperPower()
+AQLPawn::AQLPawn()
 {
-    // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+    // Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
-
-    Name = "None";
-
-    SuperPowerOwner = nullptr;
 }
 
 //------------------------------------------------------------
 // Called when the game starts or when spawned
 //------------------------------------------------------------
-void AQLSuperPower::BeginPlay()
+void AQLPawn::BeginPlay()
 {
     Super::BeginPlay();
 }
@@ -36,37 +31,36 @@ void AQLSuperPower::BeginPlay()
 //------------------------------------------------------------
 // Called every frame
 //------------------------------------------------------------
-void AQLSuperPower::Tick( float DeltaTime )
+void AQLPawn::Tick( float DeltaTime )
 {
     Super::Tick( DeltaTime );
 }
 
 //------------------------------------------------------------
+// Called to bind functionality to input
 //------------------------------------------------------------
-const FName& AQLSuperPower::GetSuperPowerName() const
+void AQLPawn::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
-    return Name;
+    Super::SetupPlayerInputComponent(InputComponent);
 }
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLSuperPower::SetQLOwner(AActor* QLOwner)
+void AQLPawn::SetQLOwner(AActor* QLOwner)
 {
-    Super::SetQLOwner(QLOwner);
-    this->SuperPowerOwner = Cast<AQLCharacter>(QLOwner);
+    this->QLOwner = QLOwner;
 }
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLSuperPower::UnSetQLOwner()
+void AQLPawn::UnSetQLOwner()
 {
-    Super::SetQLOwner(nullptr);
-    this->SuperPowerOwner = nullptr;
+    this->QLOwner = nullptr;
 }
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-AQLCharacter* AQLSuperPower::GetSuperPowerOwner()
+AActor* AQLPawn::GetQLOwner()
 {
-    return SuperPowerOwner;
+    return QLOwner;
 }

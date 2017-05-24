@@ -21,7 +21,7 @@ AQLHealthPickUp::AQLHealthPickUp()
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
 
-    BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
+    UBoxComponent* BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
     RootComponent = BoxComponent;
     BoxComponent->InitBoxExtent(FVector(40.0f, 20.0f, 40.0f));
     BoxComponent->SetSimulatePhysics(false);

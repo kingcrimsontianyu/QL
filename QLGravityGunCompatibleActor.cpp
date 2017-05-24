@@ -22,23 +22,16 @@ AQLGravityGunCompatibleActor::AQLGravityGunCompatibleActor()
     FixedIntervalOnHit = 0.4f;
     bTriggerOnHit = false;
 
-    BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
-    RootComponent = BoxComponent;
-    BoxComponent->InitBoxExtent(FVector(defaultBoxComponentDim));
-    BoxComponent->SetSimulatePhysics(true);
-    BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-    BoxComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-    BoxComponent->SetLinearDamping(defaultLinearDamping);
-    BoxComponent->SetAngularDamping(defaultAngularDamping);
-    BoxComponent->SetNotifyRigidBodyCollision(true);
-
     StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
+    RootComponent = StaticMeshComponent;
     const ConstructorHelpers::FObjectFinder<UStaticMesh> StaticMeshObj(TEXT("/Game/StarterContent/Shapes/Shape_Cube"));
     StaticMeshComponent->SetStaticMesh(StaticMeshObj.Object);
-    StaticMeshComponent->SetSimulatePhysics(false);
-    StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-    StaticMeshComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-    StaticMeshComponent->SetupAttachment(RootComponent);
+    StaticMeshComponent->SetSimulatePhysics(true);
+    StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    StaticMeshComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+    StaticMeshComponent->SetLinearDamping(defaultLinearDamping);
+    StaticMeshComponent->SetAngularDamping(defaultAngularDamping);
+    StaticMeshComponent->SetNotifyRigidBodyCollision(true);
     StaticMeshComponent->SetWorldScale3D(FVector(1.6f));
     float zDim = StaticMeshComponent->Bounds.BoxExtent.Z; // note: extent refers to half of the side
     StaticMeshComponent->SetRelativeLocation(FVector(0.0f, 0.0f, -zDim));
@@ -52,7 +45,7 @@ AQLGravityGunCompatibleActor::AQLGravityGunCompatibleActor()
     SoundComponentList.Add("Collision", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/ggca_collision"), TEXT("GGCACollision")));
 
     // built-in dynamic delegate
-    BoxComponent->OnComponentHit.AddDynamic(this, &AQLGravityGunCompatibleActor::OnComponentHitQL);
+    StaticMeshComponent->OnComponentHit.AddDynamic(this, &AQLGravityGunCompatibleActor::OnComponentHitQL);
 }
 
 //------------------------------------------------------------

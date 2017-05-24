@@ -30,5 +30,8 @@ public:
 
     // Called every frame
     virtual void Tick( float DeltaSeconds ) override;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Box component")
+    UBoxComponent* BoxComponent;
 protected:
 };
