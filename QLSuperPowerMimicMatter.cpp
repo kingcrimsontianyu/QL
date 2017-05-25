@@ -216,7 +216,7 @@ void AQLSuperPowerMimicMatter::StopSuperPower()
         SuperPowerOwner->SetActorEnableCollision(true);
         SuperPowerOwner->SetActorTickEnabled(true);
         SuperPowerOwner->SetActorLocation(NewLocation);
-        SuperPowerOwner->SetActorRotation(NewRotation);
+        Controller->SetControlRotation(NewRotation);
 
         MyPawn->UnsetMimicActor();
         MimicActor->Destroy();
