@@ -154,8 +154,8 @@ void AQLSuperPowerMimicMatterPawn::SetMimicActor(AActor* MimicActor, UStaticMesh
     FVector CameraSpringArmLocation = { 0.0f, 0.0f, 0.0f };
     FBox Bound = MimicActor->GetComponentsBoundingBox();
     FVector Extent = Bound.GetExtent();
-    CameraSpringArmLocation.X = -Extent.X * 1.5f;
-    CameraSpringArmLocation.Z = Extent.Z * 1.2f;
+    CameraSpringArmLocation.X = -Extent.X * 2.0f;
+    CameraSpringArmLocation.Z = Extent.Z * 1.5f;
     FVector Translation = Bound.GetCenter() - GetActorLocation();
     CameraSpringArmLocation += Translation;
     CameraSpringArm->SetRelativeLocation(CameraSpringArmLocation);
