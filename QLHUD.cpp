@@ -15,6 +15,8 @@
 //------------------------------------------------------------
 AQLHUD::AQLHUD()
 {
+    ConstructorHelpers::FObjectFinder<UTexture2D> CrosshairTextureObj(TEXT("/Game/Blueprints/PlayerUMG/Internal/default_crosshair"));
+    CrosshairTextureDefault = CrosshairTextureObj.Object;
 }
 
 //------------------------------------------------------------
@@ -56,6 +58,20 @@ void AQLHUD::DrawWeaponCrosshairIfAny()
                     Canvas->DrawItem(TileItem);
                 }
             }
+        }
+        // use the default cross-hair
+        else
+        {
+            // Find the center of our canvas.
+            FVector2D Center(Canvas->ClipX * 0.5f, Canvas->ClipY * 0.5f);
+
+            // Offset by half of the texture's dimensions so that the center of the texture aligns with the center of the Canvas.
+            FVector2D CrossHairDrawPosition(Center.X - (CrosshairTextureDefault->GetSurfaceWidth() * 0.5f), Center.Y - (CrosshairTextureDefault->GetSurfaceHeight() * 0.5f));
+
+            // Draw the crosshair at the centerpoint.
+            FCanvasTileItem TileItem(CrossHairDrawPosition, CrosshairTextureDefault->Resource, FLinearColor::White);
+            TileItem.BlendMode = SE_BLEND_Translucent;
+            Canvas->DrawItem(TileItem);
         }
     }
 }

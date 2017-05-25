@@ -27,4 +27,5 @@ public:
 
 protected:
     TArray<UTexture2D*> CrosshairTextureList;
+    UTexture2D* CrosshairTextureDefault;
 };

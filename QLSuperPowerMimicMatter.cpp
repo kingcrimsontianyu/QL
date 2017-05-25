@@ -43,18 +43,25 @@ AQLSuperPowerMimicMatter::AQLSuperPowerMimicMatter()
     CharacterTimelineInterpFunction.BindUFunction(this, FName{ TEXT("CharacterTimelineCallback") });
     MimicActorTimelineInterpFunction.BindUFunction(this, FName{ TEXT("MimicActorTimelineCallback") });
 
-    //PostProcessComp = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcess"));
-    //PostProcessComp->bUnbound = true;
-    //PostProcessComp->bEnabled = false;
-    //PostProcessComp->SetupAttachment(RootComponent);
+    PostProcessComp = CreateDefaultSubobject<UPostProcessComponent>(TEXT("PostProcess"));
+    PostProcessComp->bUnbound = true;
+    PostProcessComp->bEnabled = false;
+    PostProcessComp->SetupAttachment(RootComponent);
 
-    //// post-process
-    //static ConstructorHelpers::FObjectFinder<UMaterial> SuperPowerMaterialObj(TEXT("/Game/Stuff/M_PP"));
-    //if (SuperPowerMaterialObj.Succeeded())
-    //{
-    //    SuperPowerMaterial = SuperPowerMaterialObj.Object;
-    //}
-    //SuperPowerDynamicMaterial = nullptr;
+    // post-process
+    static ConstructorHelpers::FObjectFinder<UMaterial> SuperPowerMaterialObj(TEXT("/Game/Blueprints/SuperPower/MimicMatter/Internal/M_QLMimicMatterPP"));
+    if (SuperPowerMaterialObj.Succeeded())
+    {
+        SuperPowerMaterial = SuperPowerMaterialObj.Object;
+    }
+    SuperPowerDynamicMaterial = nullptr;
+
+    // sound
+    FireAndForgetSoundWaveList.Add("Transform1", CreateFireAndForgetSoundWave(TEXT("/Game/Sounds/za_warudo"), TEXT("SoundCompTransform1")));
+    FireAndForgetSoundWaveList.Add("Transform2", CreateFireAndForgetSoundWave(TEXT("/Game/Sounds/za_warudo"), TEXT("SoundCompTransform2")));
+
+    //SoundComponentList.Add("Transform1", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/za_warudo"), TEXT("SoundCompTransform1")));
+    //SoundComponentList.Add("Transform2", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/za_warudo"), TEXT("SoundCompTransform2")));
 }
 
 //------------------------------------------------------------
@@ -74,9 +81,9 @@ void AQLSuperPowerMimicMatter::BeginPlay()
 {
     Super::BeginPlay();
 
-    //SuperPowerDynamicMaterial = UMaterialInstanceDynamic::Create(SuperPowerMaterial, this);
+    SuperPowerDynamicMaterial = UMaterialInstanceDynamic::Create(SuperPowerMaterial, this);
 
-    //PostProcessComp->AddOrUpdateBlendable(SuperPowerDynamicMaterial);
+    PostProcessComp->AddOrUpdateBlendable(SuperPowerDynamicMaterial);
 }
 
 //------------------------------------------------------------
@@ -227,11 +234,11 @@ void AQLSuperPowerMimicMatter::CharacterTimelineCallback(float Val)
     {
         SuperPowerOwner->SetActorScale3D(SuperPowerOwnerScaleCache * Val);
 
-        //// mask strength should go from 0 to 1
-        //// given the range min and max
-        //// mask strength = (val - min) * / (max - min)
-        //float maskStrength = 1.0f - (Val - minValueTimelineCurve) / (maxValueTimelineCurve - minValueTimelineCurve);
-        //SuperPowerDynamicMaterial->SetScalarParameterValue("MaskStrength", maskStrength);
+        // mask strength should go from 0 to 1
+        // given the range min and max
+        // mask strength = (val - min) * / (max - min)
+        float maskStrength = 1.0f - (Val - minValueTimelineCurve) / (maxValueTimelineCurve - minValueTimelineCurve);
+        SuperPowerDynamicMaterial->SetScalarParameterValue("MaskStrength", maskStrength);
     }
 }
 
@@ -242,8 +249,8 @@ void AQLSuperPowerMimicMatter::MimicActorTimelineCallback(float Val)
     if (MimicActor)
     {
         MimicActor->SetActorScale3D(MimicActorScaleCache * Val);
-        //float maskStrength = 1.0f - (Val - minValueTimelineCurve2) / (maxValueTimelineCurve2 - minValueTimelineCurve2);
-        //SuperPowerDynamicMaterial->SetScalarParameterValue("MaskStrength", maskStrength);
+        float maskStrength = 1.0f - (Val - minValueTimelineCurve2) / (maxValueTimelineCurve2 - minValueTimelineCurve2);
+        SuperPowerDynamicMaterial->SetScalarParameterValue("MaskStrength", maskStrength);
     }
 }
 
@@ -251,12 +258,15 @@ void AQLSuperPowerMimicMatter::MimicActorTimelineCallback(float Val)
 //------------------------------------------------------------
 void AQLSuperPowerMimicMatter::DeflateCharacter()
 {
-    //PostProcessComp->bEnabled = true;
+    PostProcessComp->bEnabled = true;
 
     const float PlayRate = 1.0f;
     CharacterTimelineComp->SetPlayRate(PlayRate);
     // non-blocking
     CharacterTimelineComp->PlayFromStart();
+
+    // apply sound
+    PlaySoundFireAndForget("Transform1", SuperPowerOwner->GetActorLocation());
 }
 
 //------------------------------------------------------------
@@ -280,5 +290,5 @@ void AQLSuperPowerMimicMatter::PostInflateMimicActor()
 {
     MyPawn->SetMovementAllowed(true);
     MyPawn->SetCanStop(true);
-    //PostProcessComp->bEnabled = false;
+    PostProcessComp->bEnabled = false;
 }
