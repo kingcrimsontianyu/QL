@@ -45,6 +45,9 @@ public:
     bool GetGamePaused();
     void PauseGame();
     void ResumeGame();
+
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
+    float GetControlledPawnVelocityLength() const;
 private:
     bool bGamePaused;
 };

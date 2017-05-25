@@ -102,3 +102,23 @@ void AQLPlayerController::ResumeGame()
         PauseMenu->RemoveFromViewport();
     }
 }
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+float AQLPlayerController::GetControlledPawnVelocityLength() const
+{
+    APawn* ControlledPawn = GetPawn();
+    if (ControlledPawn)
+    {
+        // !!! note that the pawn must have movement component in order to calculate velocity
+        // !!! otherwise the velocity is always zero.
+        // !!! todo: for super power mimic matter, the pawn does not use movement component by design
+        // !!! how to obtain the velocity then?
+        FVector temp = ControlledPawn->GetVelocity();
+        return temp.Size();
+    }
+    else
+    {
+        return 0.0;
+    }
+}

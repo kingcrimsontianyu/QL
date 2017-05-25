@@ -147,9 +147,6 @@ public:
     UFUNCTION(BlueprintCallable, Category = "C++Function")
     float GetChi() const;
 
-    UFUNCTION(BlueprintCallable, Category = "C++Function")
-    float GetVelocityLength() const;
-
     UFUNCTION(BlueprintNativeEvent, Category = "C++Function")
     bool IncrementHealth(float increment); // xxx_Implementation() version is automatically declared
 

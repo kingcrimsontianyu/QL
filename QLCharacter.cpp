@@ -785,14 +785,6 @@ float AQLCharacter::GetChi() const
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-float AQLCharacter::GetVelocityLength() const
-{
-    FVector temp = GetVelocity();
-    return temp.Size();
-}
-
-//------------------------------------------------------------
-//------------------------------------------------------------
 bool AQLCharacter::IncrementHealth_Implementation(float increment)
 {
     // if the player has already had full health
