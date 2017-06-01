@@ -26,7 +26,7 @@ AQLWeaponGravityGun::AQLWeaponGravityGun()
     FixedIntervalAltFireHeldDown = 0.2f;
     ggcActor = nullptr;
 
-    CrosshairTextureList.Add("Regular", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/GravityGun/Crosshair/gravity_gun_crosshair")));
+    CrosshairTextureList.Add("Regular", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/GravityGun/Internal/gravity_gun_crosshair")));
     InitializeCurrentCrosshairTexture("Regular");
 
     // sound
@@ -264,6 +264,8 @@ void AQLWeaponGravityGun::AltFireRepeat()
 //------------------------------------------------------------
 void AQLWeaponGravityGun::Tick(float DeltaSeconds)
 {
+    Super::Tick(DeltaSeconds);
+
     // if the gravity gun has been owned by character
     if (WeaponOwner)
     {

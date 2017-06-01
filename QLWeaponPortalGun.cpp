@@ -18,10 +18,10 @@ AQLWeaponPortalGun::AQLWeaponPortalGun()
 {
     PrimaryActorTick.bCanEverTick = true;
     Name = "PortalGun";
-    CrosshairTextureList.Add("BlueEmpty", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Crosshair/portal_gun_crosshair_blue_empty_processed")));
-    CrosshairTextureList.Add("BlueFilled", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Crosshair/portal_gun_crosshair_blue_filled_processed")));
-    CrosshairTextureList.Add("OrangeEmpty", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Crosshair/portal_gun_crosshair_orange_empty_processed")));
-    CrosshairTextureList.Add("OrangeFilled", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Crosshair/portal_gun_crosshair_orange_filled_processed")));
+    CrosshairTextureList.Add("BlueEmpty", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Internal/portal_gun_crosshair_blue_empty_processed")));
+    CrosshairTextureList.Add("BlueFilled", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Internal/portal_gun_crosshair_blue_filled_processed")));
+    CrosshairTextureList.Add("OrangeEmpty", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Internal/portal_gun_crosshair_orange_empty_processed")));
+    CrosshairTextureList.Add("OrangeFilled", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Internal/portal_gun_crosshair_orange_filled_processed")));
 
     InitializeCurrentCrosshairTexture("BlueEmpty");
     InitializeCurrentCrosshairTexture("OrangeEmpty");

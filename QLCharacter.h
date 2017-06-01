@@ -14,6 +14,7 @@
 #include "QLDebugHelper.h"
 #include "QLWeaponGravityGun.h"
 #include "QLWeaponPortalGun.h"
+#include "QLWeaponRecyclerGrenade.h"
 #include "QLSuperPowerTheWorld.h"
 #include "QLSuperPowerMimicMatter.h"
 #include "GameFramework/Character.h"
@@ -105,14 +106,17 @@ public:
     UFUNCTION()
     void AltFireReleased();
 
+    // todo: refactor
     UFUNCTION()
     void SwitchToGravityGun();
 
+    // todo: refactor
     UFUNCTION()
     void SwitchToPortalGun();
 
+    // todo: refactor
     UFUNCTION()
-    void SwitchToNeutronAWP();
+    void SwitchToRecyclerGrenade();
 
     UFUNCTION()
     void SwitchToLastWeapon();
@@ -122,7 +126,9 @@ public:
 
     void SwitchToWeapon(const FName& Name);
 
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
     void PickUpWeapon(AQLWeapon* Weapon);
+
     AQLWeapon* GetCurrentWeapon() const;
 
     UFUNCTION(BlueprintCallable, Category = "C++Function")
@@ -153,6 +159,9 @@ public:
     UFUNCTION(BlueprintNativeEvent, Category = "C++Function")
     bool IncrementChi(float increment); // xxx_Implementation() version is automatically declared
 
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
+    USkeletalMeshComponent* GetArm() const;
+
 protected:
     bool bIsFalling;
     bool bCanDoubleJump;
@@ -166,7 +175,6 @@ protected:
     float MaxHealth;
     float Chi;
     float MaxChi;
-    bool bAllWeaponAndSuperPowerUnlockable;
     AQLWeapon* CurrentWeapon;
     AQLWeapon* LastWeapon;
     TMap<FName, AQLWeapon*> WeaponList;
@@ -182,4 +190,9 @@ protected:
 
     UMaterial* SuperPowerTheWorldMaterial;
     UMaterialInstanceDynamic* SuperPowerTheWorldDynamicMaterial;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++Property")
+    USkeletalMeshComponent* ArmSkeletalMeshComponent; // initialized to nullptr in c++, to be set in BP
+
+    bool bAllWeaponAndSuperPowerUnlockable;
 };

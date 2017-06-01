@@ -204,7 +204,6 @@ void AQLSuperPowerMimicMatter::StopSuperPower()
         // apply sound
         PlaySoundFireAndForget("End", SuperPowerOwner->GetActorLocation());
 
-        SuperPowerOwner->SetActorHiddenInGame(false);
         SuperPowerOwner->SetActorRelativeScale3D(FVector(1.0f));
         Controller = MyPawn->GetController();
         FVector NewLocation = MyPawn->GetActorLocation();

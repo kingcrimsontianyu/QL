@@ -55,7 +55,7 @@ AQLCharacter::AQLCharacter()
     // creat all weapon slots
     WeaponList.Add("GravityGun", nullptr);
     WeaponList.Add("PortalGun", nullptr);
-    WeaponList.Add("NeutronAWP", nullptr);
+    WeaponList.Add("RecyclerGrenade", nullptr);
     CurrentWeapon = nullptr;
     LastWeapon = nullptr;
 
@@ -81,6 +81,8 @@ AQLCharacter::AQLCharacter()
         SuperPowerTheWorldMaterial = SuperPowerTheWorldMaterialObj.Object;
     }
     SuperPowerTheWorldDynamicMaterial = nullptr;
+
+    ArmSkeletalMeshComponent = nullptr;
 }
 
 //------------------------------------------------------------
@@ -127,7 +129,7 @@ void AQLCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompone
     InputComponent->BindAction("AltFire", EInputEvent::IE_Released, this, &AQLCharacter::AltFireReleased);
     InputComponent->BindAction("SwitchToGravityGun", EInputEvent::IE_Pressed, this, &AQLCharacter::SwitchToGravityGun);
     InputComponent->BindAction("SwitchToPortalGun", EInputEvent::IE_Pressed, this, &AQLCharacter::SwitchToPortalGun);
-    InputComponent->BindAction("SwitchToNeutronAWP", EInputEvent::IE_Pressed, this, &AQLCharacter::SwitchToNeutronAWP);
+    InputComponent->BindAction("SwitchToRecyclerGrenade", EInputEvent::IE_Pressed, this, &AQLCharacter::SwitchToRecyclerGrenade);
     InputComponent->BindAction("SwitchToLastWeapon", EInputEvent::IE_Pressed, this, &AQLCharacter::SwitchToLastWeapon);
     InputComponent->BindAction("Test", EInputEvent::IE_Pressed, this, &AQLCharacter::Test);
     InputComponent->BindAction("Inventory", EInputEvent::IE_Pressed, this, &AQLCharacter::ShowInventory);
@@ -325,9 +327,9 @@ void AQLCharacter::SwitchToPortalGun()
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLCharacter::SwitchToNeutronAWP()
+void AQLCharacter::SwitchToRecyclerGrenade()
 {
-    SwitchToWeapon("NeutronAWP");
+    SwitchToWeapon("RecyclerGrenade");
 }
 
 //------------------------------------------------------------
@@ -347,11 +349,17 @@ void AQLCharacter::SwitchToWeapon(const FName& Name)
                 if (It.Value() && It.Value() != SelectedWeapon)
                 {
                     It.Value()->ResetWeapon();
+                    It.Value()->SetActorHiddenInGame(true);
+                    It.Value()->SetActorEnableCollision(false);
+                    It.Value()->SetActorTickEnabled(false);
                 }
             }
 
             // second, switch to the selected weapon
             ChangeCurrentWeapon(SelectedWeapon);
+            SelectedWeapon->SetActorHiddenInGame(false);
+            SelectedWeapon->SetActorEnableCollision(true);
+            SelectedWeapon->SetActorTickEnabled(true);
         }
     }
 }
@@ -449,6 +457,10 @@ void AQLCharacter::UnlockAllWeaponAndSuperPower()
         {
             PickUpWeapon(GetWorld()->SpawnActor<AQLWeaponPortalGun>(AQLWeaponPortalGun::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator));
         }
+        if (!IsWeaponEquipped("RecyclerGrenade"))
+        {
+            PickUpWeapon(GetWorld()->SpawnActor<AQLWeaponRecyclerGrenade>(AQLWeaponRecyclerGrenade::StaticClass(), this->GetActorLocation(), FRotator::ZeroRotator));
+        }
         if (!CurrentWeapon)
         {
             CurrentWeapon = WeaponList["GravityGun"];
@@ -484,14 +496,11 @@ void AQLCharacter::PickUpWeapon(AQLWeapon* Weapon)
         if (!IsWeaponEquipped(Weapon->GetWeaponName()))
         {
             WeaponList[Weapon->GetWeaponName()] = Weapon;
-            ChangeCurrentWeapon(Weapon);
+            SwitchToWeapon(Weapon->GetWeaponName());
 
             // set logical ownership
             Weapon->SetQLOwner(this);
             AddToInventory(Weapon);
-
-            // physical attachment
-            Weapon->AttachToActor(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
 
             PlaySoundComponent("EquipWeapon");
         }
@@ -836,4 +845,11 @@ bool AQLCharacter::IncrementChi_Implementation(float increment)
 
         return true;
     }
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+USkeletalMeshComponent* AQLCharacter::GetArm() const
+{
+    return ArmSkeletalMeshComponent;
 }
