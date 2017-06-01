@@ -16,6 +16,7 @@
 //------------------------------------------------------------
 AQLWeaponPortalGun::AQLWeaponPortalGun()
 {
+    PrimaryActorTick.bCanEverTick = true;
     Name = "PortalGun";
     CrosshairTextureList.Add("BlueEmpty", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Crosshair/portal_gun_crosshair_blue_empty_processed")));
     CrosshairTextureList.Add("BlueFilled", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Crosshair/portal_gun_crosshair_blue_filled_processed")));

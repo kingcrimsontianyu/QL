@@ -16,6 +16,7 @@
 //------------------------------------------------------------
 AQLWeaponGravityGun::AQLWeaponGravityGun()
 {
+    PrimaryActorTick.bCanEverTick = true;
     Name = "GravityGun";
     bIsGravityGunCompatibleActorHeld = false;
     bIsAltFireHeldDown = false;

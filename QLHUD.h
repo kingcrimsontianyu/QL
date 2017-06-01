@@ -23,7 +23,7 @@ public:
     AQLHUD();
     virtual void DrawHUD() override;
 
-    void DrawWeaponCrosshairIfAny();
+    void DrawDefaultCrosshair();
 
 protected:
     TArray<UTexture2D*> CrosshairTextureList;

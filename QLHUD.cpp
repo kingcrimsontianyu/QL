@@ -25,19 +25,12 @@ void AQLHUD::DrawHUD()
 {
     Super::DrawHUD();
 
-    DrawWeaponCrosshairIfAny();
-}
-
-//------------------------------------------------------------
-//------------------------------------------------------------
-void AQLHUD::DrawWeaponCrosshairIfAny()
-{
     AQLCharacter* QLCharacter = Cast<AQLCharacter>(GetOwningPawn());
-    // if owning pawn exists
+    // if owning character exists
     if (QLCharacter)
     {
         AQLWeapon* CurrentWeapon = QLCharacter->GetCurrentWeapon();
-        // if owning pawn's weapon exists
+        // if owning character's weapon exists
         if (CurrentWeapon)
         {
             CrosshairTextureList = CurrentWeapon->CurrentCrosshairTextureList;
@@ -58,20 +51,32 @@ void AQLHUD::DrawWeaponCrosshairIfAny()
                     Canvas->DrawItem(TileItem);
                 }
             }
+            // if weapon does not have specific cross-hair, use default
+            else
+            {
+                DrawDefaultCrosshair();
+            }
         }
-        // use the default cross-hair
+        // if no owning character, use the default cross-hair
         else
         {
-            // Find the center of our canvas.
-            FVector2D Center(Canvas->ClipX * 0.5f, Canvas->ClipY * 0.5f);
-
-            // Offset by half of the texture's dimensions so that the center of the texture aligns with the center of the Canvas.
-            FVector2D CrossHairDrawPosition(Center.X - (CrosshairTextureDefault->GetSurfaceWidth() * 0.5f), Center.Y - (CrosshairTextureDefault->GetSurfaceHeight() * 0.5f));
-
-            // Draw the crosshair at the centerpoint.
-            FCanvasTileItem TileItem(CrossHairDrawPosition, CrosshairTextureDefault->Resource, FLinearColor::White);
-            TileItem.BlendMode = SE_BLEND_Translucent;
-            Canvas->DrawItem(TileItem);
+            DrawDefaultCrosshair();
         }
     }
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+void AQLHUD::DrawDefaultCrosshair()
+{
+    // Find the center of our canvas.
+    FVector2D Center(Canvas->ClipX * 0.5f, Canvas->ClipY * 0.5f);
+
+    // Offset by half of the texture's dimensions so that the center of the texture aligns with the center of the Canvas.
+    FVector2D CrossHairDrawPosition(Center.X - (CrosshairTextureDefault->GetSurfaceWidth() * 0.5f), Center.Y - (CrosshairTextureDefault->GetSurfaceHeight() * 0.5f));
+
+    // Draw the crosshair at the centerpoint.
+    FCanvasTileItem TileItem(CrossHairDrawPosition, CrosshairTextureDefault->Resource, FLinearColor::White);
+    TileItem.BlendMode = SE_BLEND_Translucent;
+    Canvas->DrawItem(TileItem);
 }
