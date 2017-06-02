@@ -37,6 +37,9 @@ protected:
     void Implode();
     void Annihilate();
 
+    UFUNCTION(BlueprintNativeEvent, Category = "C++Function")
+    void ProduceChi(AActor* Actor); // xxx_Implementation() version is automatically declared
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++Property")
     USphereComponent* SphereComponent;
 

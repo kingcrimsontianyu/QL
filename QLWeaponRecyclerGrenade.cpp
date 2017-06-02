@@ -125,9 +125,16 @@ void AQLWeaponRecyclerGrenade::Annihilate()
         if (Comp->IsSimulatingPhysics())
         {
             TWeakObjectPtr<AActor> Actor = OutOverlaps[Index].Actor;
+            ProduceChi(Actor.Get());
             Actor->Destroy();
         }
     }
 
     Destroy();
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+void AQLWeaponRecyclerGrenade::ProduceChi_Implementation(AActor* Actor)
+{
 }
