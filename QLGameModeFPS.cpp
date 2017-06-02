@@ -15,12 +15,7 @@
 //------------------------------------------------------------
 AQLGameModeFPS::AQLGameModeFPS()
 {
-    static ConstructorHelpers::FObjectFinder<UClass> QLCharacterObj(TEXT("AQLCharacter'/Game/Blueprints/Essential/BP_QLCharacter.BP_QLCharacter_C'"));
-    if (QLCharacterObj.Object)
-    {
-        DefaultPawnClass = QLCharacterObj.Object;
-    }
-
+    DefaultPawnClass = AQLCharacter::StaticClass();
     PlayerControllerClass = AQLPlayerController::StaticClass();
     HUDClass = AQLHUD::StaticClass();
 }

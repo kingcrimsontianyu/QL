@@ -36,7 +36,7 @@ public:
     float GetHealthIncrement();
 
     UFUNCTION(BlueprintCallable, Category = "C++Function")
-    void SetHealthIncrement(float Increment);
+    void SetHealthIncrement(float Increment_ext);
 
 protected:
     float Increment;

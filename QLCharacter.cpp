@@ -69,7 +69,8 @@ AQLCharacter::AQLCharacter()
     SoundNoAttenuation->Attenuation.bAttenuate = false;
     SoundAttenuation = CreateDefaultSubobject<USoundAttenuation>(TEXT("SoundAttenuation"));
     SoundAttenuation->Attenuation.bAttenuate = true;
-    SoundAttenuation->Attenuation.DistanceAlgorithm = ESoundDistanceModel::ATTENUATION_Linear;
+    SoundAttenuation->Attenuation.bSpatialize = true;
+    SoundAttenuation->Attenuation.SpatializationAlgorithm = ESoundSpatializationAlgorithm::SPATIALIZATION_Default;
     SoundComponentList.Add("EquipWeapon", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/medshot4_from_hl2"), TEXT("SoundEquipWeaponComp")));
     SoundComponentList.Add("SwitchWeapon", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/swords_collide"), TEXT("SoundSwitchWeaponComp")));
     SoundComponentList.Add("DoubleJump", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/quake_jump"), TEXT("SoundDoubleJumpComp")));
@@ -115,32 +116,33 @@ void AQLCharacter::Tick( float DeltaTime )
 //------------------------------------------------------------
 // Called to bind functionality to input
 //------------------------------------------------------------
-void AQLCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent)
+void AQLCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent_ext)
 {
-    Super::SetupPlayerInputComponent(InputComponent);
+    Super::SetupPlayerInputComponent(InputComponent_ext);
 
     // Set up "action" bindings.
-    InputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &AQLCharacter::StartJump);
-    InputComponent->BindAction("Jump", EInputEvent::IE_Released, this, &AQLCharacter::StopJump);
-    InputComponent->BindAction("Crouch", EInputEvent::IE_Pressed, this, &AQLCharacter::ToggleCrouch);
-    InputComponent->BindAction("Sprint", EInputEvent::IE_Pressed, this, &AQLCharacter::ToggleSprint);
-    InputComponent->BindAction("Fire", EInputEvent::IE_Pressed, this, &AQLCharacter::Fire);
-    InputComponent->BindAction("AltFire", EInputEvent::IE_Pressed, this, &AQLCharacter::AltFire);
-    InputComponent->BindAction("AltFire", EInputEvent::IE_Released, this, &AQLCharacter::AltFireReleased);
-    InputComponent->BindAction("SwitchToGravityGun", EInputEvent::IE_Pressed, this, &AQLCharacter::SwitchToGravityGun);
-    InputComponent->BindAction("SwitchToPortalGun", EInputEvent::IE_Pressed, this, &AQLCharacter::SwitchToPortalGun);
-    InputComponent->BindAction("SwitchToRecyclerGrenade", EInputEvent::IE_Pressed, this, &AQLCharacter::SwitchToRecyclerGrenade);
-    InputComponent->BindAction("SwitchToLastWeapon", EInputEvent::IE_Pressed, this, &AQLCharacter::SwitchToLastWeapon);
-    InputComponent->BindAction("Test", EInputEvent::IE_Pressed, this, &AQLCharacter::Test);
-    InputComponent->BindAction("Inventory", EInputEvent::IE_Pressed, this, &AQLCharacter::ShowInventory);
-    InputComponent->BindAction("Zoom", EInputEvent::IE_Pressed, this, &AQLCharacter::Zoom);
-    InputComponent->BindAction("ExecuteSuperPower", EInputEvent::IE_Pressed, this, &AQLCharacter::ExecuteSuperPower);
+    InputComponent_ext->BindAction("Jump", EInputEvent::IE_Pressed, this, &AQLCharacter::StartJump);
+    InputComponent_ext->BindAction("Jump", EInputEvent::IE_Released, this, &AQLCharacter::StopJump);
+    InputComponent_ext->BindAction("Crouch", EInputEvent::IE_Pressed, this, &AQLCharacter::ToggleCrouch);
+    InputComponent_ext->BindAction("Sprint", EInputEvent::IE_Pressed, this, &AQLCharacter::ToggleSprint);
+    InputComponent_ext->BindAction("Fire", EInputEvent::IE_Pressed, this, &AQLCharacter::Fire);
+    InputComponent_ext->BindAction("Fire", EInputEvent::IE_Released, this, &AQLCharacter::FireReleased);
+    InputComponent_ext->BindAction("AltFire", EInputEvent::IE_Pressed, this, &AQLCharacter::AltFire);
+    InputComponent_ext->BindAction("AltFire", EInputEvent::IE_Released, this, &AQLCharacter::AltFireReleased);
+    InputComponent_ext->BindAction("SwitchToGravityGun", EInputEvent::IE_Pressed, this, &AQLCharacter::SwitchToGravityGun);
+    InputComponent_ext->BindAction("SwitchToPortalGun", EInputEvent::IE_Pressed, this, &AQLCharacter::SwitchToPortalGun);
+    InputComponent_ext->BindAction("SwitchToRecyclerGrenade", EInputEvent::IE_Pressed, this, &AQLCharacter::SwitchToRecyclerGrenade);
+    InputComponent_ext->BindAction("SwitchToLastWeapon", EInputEvent::IE_Pressed, this, &AQLCharacter::SwitchToLastWeapon);
+    InputComponent_ext->BindAction("Test", EInputEvent::IE_Pressed, this, &AQLCharacter::Test);
+    InputComponent_ext->BindAction("Inventory", EInputEvent::IE_Pressed, this, &AQLCharacter::ShowInventory);
+    InputComponent_ext->BindAction("Zoom", EInputEvent::IE_Pressed, this, &AQLCharacter::Zoom);
+    InputComponent_ext->BindAction("ExecuteSuperPower", EInputEvent::IE_Pressed, this, &AQLCharacter::ExecuteSuperPower);
 
     // Set up "axis" bindings.
-    InputComponent->BindAxis("MoveForward", this, &AQLCharacter::MoveForward);
-    InputComponent->BindAxis("MoveRight", this, &AQLCharacter::MoveRight);
-    InputComponent->BindAxis("Turn", this, &AQLCharacter::AddControllerYawInput);
-    InputComponent->BindAxis("LookUp", this, &AQLCharacter::AddControllerPitchInput);
+    InputComponent_ext->BindAxis("MoveForward", this, &AQLCharacter::MoveForward);
+    InputComponent_ext->BindAxis("MoveRight", this, &AQLCharacter::MoveRight);
+    InputComponent_ext->BindAxis("Turn", this, &AQLCharacter::AddControllerYawInput);
+    InputComponent_ext->BindAxis("LookUp", this, &AQLCharacter::AddControllerPitchInput);
 }
 
 //------------------------------------------------------------
@@ -286,6 +288,16 @@ void AQLCharacter::Fire()
     if (CurrentWeapon)
     {
         CurrentWeapon->Fire();
+    }
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+void AQLCharacter::FireReleased()
+{
+    if (CurrentWeapon)
+    {
+        CurrentWeapon->FireReleased();
     }
 }
 
@@ -509,6 +521,28 @@ void AQLCharacter::PickUpWeapon(AQLWeapon* Weapon)
 
 //------------------------------------------------------------
 //------------------------------------------------------------
+void AQLCharacter::DropOffWeapon(AQLWeapon* Weapon)
+{
+    // if the weapon exists
+    if (Weapon)
+    {
+        if (IsWeaponEquipped(Weapon->GetWeaponName()))
+        {
+            WeaponList[Weapon->GetWeaponName()] = nullptr;
+            CurrentWeapon = nullptr;
+
+            // unset logical ownership
+            Weapon->UnSetQLOwner();
+            RemoveFromInventory(Weapon);
+
+            // physical detachment
+            Weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+        }
+    }
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
 AQLWeapon* AQLCharacter::GetCurrentWeapon() const
 {
     return CurrentWeapon;
@@ -695,7 +729,7 @@ void AQLCharacter::PlaySoundFireAndForget(const FName& SoundName, const FVector&
 // note: ConstructorHelpers::FObjectFinder<T> and
 // CreateDefaultSubobject<T> can only be used inside ctor!!!
 //------------------------------------------------------------
-UAudioComponent* AQLCharacter::CreateSoundComponent(USceneComponent*& RootComponent, const TCHAR* soundPath, const TCHAR* soundName)
+UAudioComponent* AQLCharacter::CreateSoundComponent(USceneComponent*& RootComponent_ext, const TCHAR* soundPath, const TCHAR* soundName)
 {
     ConstructorHelpers::FObjectFinder<USoundWave> soundWave(soundPath);
     UAudioComponent* soundComp = CreateDefaultSubobject<UAudioComponent>(soundName);
@@ -704,7 +738,7 @@ UAudioComponent* AQLCharacter::CreateSoundComponent(USceneComponent*& RootCompon
     if (soundWave.Object->IsValidLowLevel() && soundComp)
     {
         soundComp->SetSound(soundWave.Object);
-        soundComp->SetupAttachment(RootComponent);
+        soundComp->SetupAttachment(RootComponent_ext);
         soundComp->SetRelativeLocation(FVector(0.0f));
         soundComp->bAutoActivate = false;
         soundComp->AdjustAttenuation(SoundAttenuation->Attenuation);
@@ -852,4 +886,11 @@ bool AQLCharacter::IncrementChi_Implementation(float increment)
 USkeletalMeshComponent* AQLCharacter::GetArm() const
 {
     return ArmSkeletalMeshComponent;
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+UCameraComponent* AQLCharacter::GetQLCameraComponent() const
+{
+    return QLCameraComponent;
 }

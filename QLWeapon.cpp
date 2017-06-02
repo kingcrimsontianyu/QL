@@ -25,7 +25,7 @@ AQLWeapon::AQLWeapon()
     bIsAltFireHeldDown = false;
     bIsAltFirePressed = false;
 
-    RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
+    //RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
 
     // built-in dynamic delegate
     this->OnActorBeginOverlap.AddDynamic(this, &AQLWeapon::OnOverlapBeginForActor);

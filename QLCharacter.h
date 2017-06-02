@@ -52,7 +52,7 @@ public:
     virtual void Tick( float DeltaSeconds ) override;
 
     // Called to bind functionality to input
-    virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
+    virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent_ext) override;
 
     virtual void Landed(const FHitResult& Hit) override;
     virtual void Falling() override;
@@ -101,6 +101,9 @@ public:
     void Fire();
 
     UFUNCTION()
+    void FireReleased();
+
+    UFUNCTION()
     void AltFire();
 
     UFUNCTION()
@@ -128,6 +131,9 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "C++Function")
     void PickUpWeapon(AQLWeapon* Weapon);
+
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
+    void DropOffWeapon(AQLWeapon* Weapon);
 
     AQLWeapon* GetCurrentWeapon() const;
 
@@ -161,6 +167,8 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "C++Function")
     USkeletalMeshComponent* GetArm() const;
+
+    UCameraComponent* GetQLCameraComponent() const;
 
 protected:
     bool bIsFalling;

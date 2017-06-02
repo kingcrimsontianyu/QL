@@ -14,6 +14,8 @@
 #include "QLWeapon.h"
 #include "QLWeaponRecyclerGrenade.generated.h"
 
+class AQLCharacter;
+
 UCLASS()
 class QL_API AQLWeaponRecyclerGrenade : public AQLWeapon
 {
@@ -29,8 +31,18 @@ public:
     // Called every frame
     virtual void Tick( float DeltaSeconds ) override;
 
-    virtual void Fire() override;
+    virtual void FireReleased() override;
 
 protected:
-    int NumRecyclerGrenade;
+    void Implode();
+    void Annihilate();
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++Property")
+    USphereComponent* SphereComponent;
+
+    FTimerHandle IdleTimerHandle;
+    FTimerHandle ImplodeTimerHandle;
+    FTimerHandle AnnihilateTimerHandle;
+
+    AQLCharacter* WeaponOwnerCached;
 };

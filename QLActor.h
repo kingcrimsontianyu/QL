@@ -24,7 +24,7 @@ public:
     AQLActor();
     virtual void BeginPlay() override;
     virtual void Tick( float DeltaSeconds ) override;
-    virtual void SetQLOwner(AActor* QLOwner);
+    virtual void SetQLOwner(AActor* QLOwner_ext);
     virtual void UnSetQLOwner();
     AActor* GetQLOwner();
 
@@ -34,7 +34,7 @@ public:
     //UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Box component")
     //UBoxComponent* BoxComponent;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Static mesh component")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++Property")
     UStaticMeshComponent* StaticMeshComponent;
 
     UStaticMeshComponent*& GetStaticMeshComponent();

@@ -27,7 +27,8 @@ AQLActor::AQLActor()
 
     SoundAttenuation = CreateDefaultSubobject<USoundAttenuation>(TEXT("SoundAttenuation"));
     SoundAttenuation->Attenuation.bAttenuate = true;
-    SoundAttenuation->Attenuation.DistanceAlgorithm = ESoundDistanceModel::ATTENUATION_LogReverse;
+    SoundAttenuation->Attenuation.bSpatialize = true;
+    SoundAttenuation->Attenuation.SpatializationAlgorithm = ESoundSpatializationAlgorithm::SPATIALIZATION_Default;
 }
 
 //------------------------------------------------------------
@@ -48,16 +49,16 @@ void AQLActor::Tick( float DeltaTime )
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLActor::SetQLOwner(AActor* QLOwner)
+void AQLActor::SetQLOwner(AActor* QLOwner_ext)
 {
-    this->QLOwner = QLOwner;
+    QLOwner = QLOwner_ext;
 }
 
 //------------------------------------------------------------
 //------------------------------------------------------------
 void AQLActor::UnSetQLOwner()
 {
-    this->QLOwner = nullptr;
+    QLOwner = nullptr;
 }
 
 //------------------------------------------------------------
@@ -89,7 +90,7 @@ void AQLActor::PlaySoundFireAndForget(const FName& SoundName, const FVector& Loc
 // note: ConstructorHelpers::FObjectFinder<T> and
 // CreateDefaultSubobject<T> can only be used inside ctor!!!
 //------------------------------------------------------------
-UAudioComponent* AQLActor::CreateSoundComponent(USceneComponent*& RootComponent, const TCHAR* soundPath, const TCHAR* soundName)
+UAudioComponent* AQLActor::CreateSoundComponent(USceneComponent*& RootComponent_ext, const TCHAR* soundPath, const TCHAR* soundName)
 {
     ConstructorHelpers::FObjectFinder<USoundWave> soundWave(soundPath);
     UAudioComponent* soundComp = CreateDefaultSubobject<UAudioComponent>(soundName);
@@ -98,7 +99,7 @@ UAudioComponent* AQLActor::CreateSoundComponent(USceneComponent*& RootComponent,
     if (soundWave.Succeeded() && soundComp)
     {
         soundComp->SetSound(soundWave.Object);
-        soundComp->SetupAttachment(RootComponent);
+        soundComp->SetupAttachment(RootComponent_ext);
         soundComp->SetRelativeLocation(FVector(0.0f));
         soundComp->bAutoActivate = false;
         soundComp->AdjustAttenuation(SoundAttenuation->Attenuation);
