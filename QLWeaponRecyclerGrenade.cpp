@@ -81,6 +81,7 @@ void AQLWeaponRecyclerGrenade::Implode()
     }
     SetActorHiddenInGame(true);
 
+    // reference about the concepts: https://docs.unrealengine.com/latest/INT/Engine/Physics/Collision/Reference/index.html
     // collapse space and attract objects
     // TArray < struct FOverlapResult > & OutOverlaps,
     // const FVector & Pos,
@@ -89,7 +90,6 @@ void AQLWeaponRecyclerGrenade::Implode()
     // const FCollisionShape & CollisionShape,
     // const FCollisionQueryParams & Params,
     // const FCollisionResponseParams & ResponseParam
-    TArray<FOverlapResult> OutOverlaps;
     FCollisionQueryParams CollisionQueryParams;
     FCollisionResponseParams CollisionResponseParams;
     GetWorld()->OverlapMultiByChannel(OutOverlaps,
@@ -101,8 +101,11 @@ void AQLWeaponRecyclerGrenade::Implode()
         CollisionResponseParams);
     for (int32 Index = 0; Index != OutOverlaps.Num(); ++Index)
     {
-        FString temp = OutOverlaps[Index].Actor->GetName();
-        QLUtility::QLSayLong(temp);
+        TWeakObjectPtr<UPrimitiveComponent> Comp = OutOverlaps[Index].Component;
+        // only affect actors with components that simulate physics
+        if(Comp->IsSimulatingPhysics())
+        {
+        }
     }
 
     const float ImplodeTime = 1.5f;
@@ -114,5 +117,17 @@ void AQLWeaponRecyclerGrenade::Implode()
 void AQLWeaponRecyclerGrenade::Annihilate()
 {
     QLUtility::QLSay("Annihilate()");
+
+    for (int32 Index = 0; Index != OutOverlaps.Num(); ++Index)
+    {
+        TWeakObjectPtr<UPrimitiveComponent> Comp = OutOverlaps[Index].Component;
+        // only affect actors with components that simulate physics
+        if (Comp->IsSimulatingPhysics())
+        {
+            TWeakObjectPtr<AActor> Actor = OutOverlaps[Index].Actor;
+            Actor->Destroy();
+        }
+    }
+
     Destroy();
 }

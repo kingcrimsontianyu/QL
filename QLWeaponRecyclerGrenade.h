@@ -45,4 +45,5 @@ protected:
     FTimerHandle AnnihilateTimerHandle;
 
     AQLCharacter* WeaponOwnerCached;
+    TArray<FOverlapResult> OutOverlaps;
 };
