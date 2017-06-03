@@ -137,6 +137,7 @@ void AQLCharacter::SetupPlayerInputComponent(class UInputComponent* InputCompone
     InputComponent_ext->BindAction("Inventory", EInputEvent::IE_Pressed, this, &AQLCharacter::ShowInventory);
     InputComponent_ext->BindAction("Zoom", EInputEvent::IE_Pressed, this, &AQLCharacter::Zoom);
     InputComponent_ext->BindAction("ExecuteSuperPower", EInputEvent::IE_Pressed, this, &AQLCharacter::ExecuteSuperPower);
+    InputComponent_ext->BindAction("ReplayCurrentLevel", EInputEvent::IE_Pressed, this, &AQLCharacter::ReplayCurrentLevel);
 
     // Set up "axis" bindings.
     InputComponent_ext->BindAxis("MoveForward", this, &AQLCharacter::MoveForward);
@@ -893,4 +894,12 @@ USkeletalMeshComponent* AQLCharacter::GetArm() const
 UCameraComponent* AQLCharacter::GetQLCameraComponent() const
 {
     return QLCameraComponent;
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+void AQLCharacter::ReplayCurrentLevel()
+{
+    FString LevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
+    UGameplayStatics::OpenLevel(GetWorld(), FName(*LevelName));
 }

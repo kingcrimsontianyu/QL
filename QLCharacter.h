@@ -159,16 +159,18 @@ public:
     UFUNCTION(BlueprintCallable, Category = "C++Function")
     float GetChi() const;
 
-    UFUNCTION(BlueprintNativeEvent, Category = "C++Function")
+    UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "C++Function")
     bool IncrementHealth(float increment); // xxx_Implementation() version is automatically declared
 
-    UFUNCTION(BlueprintNativeEvent, Category = "C++Function")
+    UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "C++Function")
     bool IncrementChi(float increment); // xxx_Implementation() version is automatically declared
 
     UFUNCTION(BlueprintCallable, Category = "C++Function")
     USkeletalMeshComponent* GetArm() const;
 
     UCameraComponent* GetQLCameraComponent() const;
+
+    void ReplayCurrentLevel();
 
 protected:
     bool bIsFalling;

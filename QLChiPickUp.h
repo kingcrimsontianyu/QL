@@ -7,15 +7,14 @@
 // (='.'=)
 // (")-(")o
 //----------------------------------------
-
 #pragma once
 
 #include "QLActor.h"
 #include "QLCharacter.h"
-#include "QLHealthPickUp.generated.h"
+#include "QLChiPickUp.generated.h"
 
 UCLASS()
-class QL_API AQLHealthPickUp : public AQLActor
+class QL_API AQLChiPickUp : public AQLActor
 {
     GENERATED_BODY()
 
@@ -25,20 +24,18 @@ protected:
 
 public:
     // Sets default values for this actor's properties
-    AQLHealthPickUp();
+    AQLChiPickUp();
 
     // Called every frame
-    virtual void Tick( float DeltaSeconds ) override;
-
-    UFUNCTION()
-    void OnOverlapBeginForActor(AActor* OverlappedActor, AActor* OtherActor);
+    virtual void Tick(float DeltaTime) override;
 
     UFUNCTION(BlueprintCallable, Category = "C++Function")
-    float GetHealthIncrement();
+    float GetChiIncrement();
 
     UFUNCTION(BlueprintCallable, Category = "C++Function")
-    void SetHealthIncrement(float Increment_ext);
+    void SetChiIncrement(float Increment_ext);
 
 protected:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++Property")
     float Increment;
 };
