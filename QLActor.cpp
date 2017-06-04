@@ -10,6 +10,7 @@
 
 #include "QL.h"
 #include "QLActor.h"
+#include "QLGameModeBase.h"
 
 //------------------------------------------------------------
 // Sets default values
@@ -87,6 +88,21 @@ void AQLActor::PlaySoundFireAndForget(const FName& SoundName, const FVector& Loc
 }
 
 //------------------------------------------------------------
+//------------------------------------------------------------
+void AQLActor::PlaySoundFireAndForgetFromGameMode(const FName& SoundName)
+{
+    AGameModeBase* GameModeBase = UGameplayStatics::GetGameMode(GetWorld());
+    if (GameModeBase)
+    {
+        AQLGameModeBase* QLGameModeBase = Cast<AQLGameModeBase>(GameModeBase);
+        if (QLGameModeBase)
+        {
+            QLGameModeBase->PlaySoundFireAndForget(SoundName);
+        }
+    }
+}
+
+//------------------------------------------------------------
 // note: ConstructorHelpers::FObjectFinder<T> and
 // CreateDefaultSubobject<T> can only be used inside ctor!!!
 //------------------------------------------------------------
@@ -137,4 +153,26 @@ USoundWave* AQLActor::CreateFireAndForgetSoundWave(const TCHAR* SoundPath, const
 UStaticMeshComponent*& AQLActor::GetStaticMeshComponent()
 {
     return StaticMeshComponent;
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+void AQLActor::AddSoundComponentToList(FName SoundName, UAudioComponent* SoundComponent)
+{
+    if (SoundComponent)
+    {
+        SoundComponent->SetupAttachment(RootComponent);
+        SoundComponent->SetRelativeLocation(FVector(0.0f));
+        SoundComponentList.Add(SoundName, SoundComponent);
+    }
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+void AQLActor::AddFireAndForgetSoundWaveToList(FName SoundName, USoundWave* SoundWave)
+{
+    if (SoundWave)
+    {
+        FireAndForgetSoundWaveList.Add(SoundName, SoundWave);
+    }
 }

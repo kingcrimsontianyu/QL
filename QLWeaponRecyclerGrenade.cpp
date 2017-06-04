@@ -27,7 +27,6 @@ AQLWeaponRecyclerGrenade::AQLWeaponRecyclerGrenade()
     PostProcessDynamicMaterial = nullptr;
 
     // sound
-    FireAndForgetSoundWaveList.Add("Countdown", CreateFireAndForgetSoundWave(TEXT("/Game/Sounds/countdown"), TEXT("SoundCompCountdown")));
     FireAndForgetSoundWaveList.Add("Annihilate", CreateFireAndForgetSoundWave(TEXT("/Game/Sounds/laser"), TEXT("SoundCompAnnihilate")));
 }
 
@@ -61,6 +60,8 @@ void AQLWeaponRecyclerGrenade::Tick( float DeltaTime )
 //------------------------------------------------------------
 void AQLWeaponRecyclerGrenade::FireReleased()
 {
+    PlaySoundFireAndForgetFromGameMode("biubiu");
+
     if (SphereComponent)
     {
         // apply sound
