@@ -29,6 +29,9 @@ public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
 
+    UFUNCTION()
+    void OnOverlapBeginForActor(AActor* OverlappedActor, AActor* OtherActor);
+
     UFUNCTION(BlueprintCallable, Category = "C++Function")
     float GetChiIncrement();
 

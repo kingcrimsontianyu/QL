@@ -40,5 +40,6 @@ public:
     void SetHealthIncrement(float Increment_ext);
 
 protected:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++Property")
     float Increment;
 };

@@ -21,16 +21,6 @@ AQLHealthPickUp::AQLHealthPickUp()
     // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
     PrimaryActorTick.bCanEverTick = true;
 
-    UBoxComponent* BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
-    RootComponent = BoxComponent;
-    BoxComponent->InitBoxExtent(FVector(40.0f, 20.0f, 40.0f));
-    BoxComponent->SetSimulatePhysics(false);
-    BoxComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-    BoxComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
-
-    // sound
-    //FireAndForgetSoundWaveList.Add("Consume", CreateFireAndForgetSoundWave(TEXT("/Game/Sounds/bite"), TEXT("HealthPickUpConsume")));
-
     // built-in dynamic delegate
     this->OnActorBeginOverlap.AddDynamic(this, &AQLHealthPickUp::OnOverlapBeginForActor);
 }
