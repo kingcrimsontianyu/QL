@@ -39,7 +39,7 @@ public:
     virtual void AltFireReleased() {};
     virtual void AltFireRepeat() {};
 
-    void InitializeCurrentCrosshairTexture(const FName& crosshairTextureName);
+    void AddActiveCrosshairTexture(const FName& Name);
     UTexture2D* CreateCrosshairTexture(const TCHAR* texturePath);
     const FName& GetWeaponName() const;
 
@@ -50,10 +50,14 @@ public:
     virtual void UnSetQLOwner() override;
     AQLCharacter* GetWeaponOwner();
     virtual void ResetWeapon() {};
-    TArray<UTexture2D*> CurrentCrosshairTextureList;
-    TMap<FName, UTexture2D*> CrosshairTextureList;
+
     virtual void Zoom() {};
 
+    const TArray<UTexture2D*>& GetActiveCrosshairTextureList() const;
+
+    UTexture2D* GetCrosshairTexture(const FName& Name) const;
+
+    void ReplaceActiveCrosshairTexture(UTexture2D* CrosshairTexture, int Index);
 protected:
     FName Name;
     bool bIsFireHeldDown;
@@ -61,4 +65,9 @@ protected:
     bool bIsAltFirePressed; // key/button is pressed, regardless if it is subsequently released or held down
     AQLCharacter* WeaponOwner;
     FHitResult Hit;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++Property")
+    TMap<FName, UTexture2D*> CrosshairTextureList;
+
+    TArray<UTexture2D*> ActiveCrosshairTextureList;
 };

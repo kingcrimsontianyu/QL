@@ -15,6 +15,7 @@ namespace QLUtility
     void QLSay(const FString& string);
     void QLSayLong(const FString& string);
     void QLSay(const FString& string, const float time);
+    void QLWarning(const FString& string);
 
     void PlaySoundComponent(TMap<FName, UAudioComponent*>& SoundComponentList, const FName& SoundName);
     void PlaySoundFireAndForget(UWorld* World,

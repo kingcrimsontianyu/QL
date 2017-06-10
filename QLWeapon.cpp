@@ -49,16 +49,23 @@ void AQLWeapon::Tick( float DeltaTime )
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLWeapon::InitializeCurrentCrosshairTexture(const FName& crosshairTextureName)
+void AQLWeapon::AddActiveCrosshairTexture(const FName& Name)
 {
-    UTexture2D** valuePtr = CrosshairTextureList.Find(crosshairTextureName);
+    bool bSuccess = false;
+    UTexture2D** valuePtr = CrosshairTextureList.Find(Name);
     if (valuePtr)
     {
         UTexture2D* crosshairTexture = *valuePtr;
         if (crosshairTexture)
         {
-            CurrentCrosshairTextureList.Add(crosshairTexture);
+            ActiveCrosshairTextureList.Add(crosshairTexture);
+            bSuccess = true;
         }
+    }
+
+    if(!bSuccess)
+    {
+        QLUtility::QLWarning("crosshair not found.");
     }
 }
 
@@ -120,4 +127,36 @@ void AQLWeapon::UnSetQLOwner()
 AQLCharacter* AQLWeapon::GetWeaponOwner()
 {
     return WeaponOwner;
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+const TArray<UTexture2D*>& AQLWeapon::GetActiveCrosshairTextureList() const
+{
+    return ActiveCrosshairTextureList;
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+UTexture2D* AQLWeapon::GetCrosshairTexture(const FName& Name) const
+{
+    UTexture2D* const* pTexture = CrosshairTextureList.Find(Name);
+    if (pTexture)
+    {
+        return *pTexture;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+void AQLWeapon::ReplaceActiveCrosshairTexture(UTexture2D* CrosshairTexture, int Index)
+{
+    if (CrosshairTexture && Index >= 0 && Index < ActiveCrosshairTextureList.Num())
+    {
+        ActiveCrosshairTextureList[Index] = CrosshairTexture;
+    }
 }

@@ -25,14 +25,16 @@ AQLWeaponGravityGun::AQLWeaponGravityGun()
     RunningTimeAltFireHeldDown = 0.0f;
     FixedIntervalAltFireHeldDown = 0.2f;
     ggcActor = nullptr;
+ }
 
-    CrosshairTextureList.Add("Regular", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/GravityGun/Internal/gravity_gun_crosshair")));
-    InitializeCurrentCrosshairTexture("Regular");
+//------------------------------------------------------------
+// Called when the game starts or when spawned
+//------------------------------------------------------------
+void AQLWeaponGravityGun::BeginPlay()
+{
+    Super::BeginPlay();
 
-    // sound
-    //SoundComponentList.Add("None", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/bottle"), TEXT("SoundNoneComp")));
-    //SoundComponentList.Add("Hold", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/zoom_in"), TEXT("SoundHoldComp")));
-    //SoundComponentList.Add("Fire", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/gravity_gun_fire"), TEXT("SoundFireComp")));
+    AddActiveCrosshairTexture("Regular");
 }
 
 //------------------------------------------------------------

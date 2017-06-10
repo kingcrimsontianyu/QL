@@ -398,11 +398,11 @@ void AQLPortal::SetPortal(EPortalType PortalType, AQLPortal* Spouse)
     // set up crosshair
     if (PortalType == EPortalType::Blue && PortalOwner)
     {
-        PortalOwner->CurrentCrosshairTextureList[0] = PortalOwner->CrosshairTextureList["BlueFilled"];
+        PortalOwner->ReplaceActiveCrosshairTexture(PortalOwner->GetCrosshairTexture("BlueFilled"), 0);
     }
     else if (PortalType == EPortalType::Orange && PortalOwner)
     {
-        PortalOwner->CurrentCrosshairTextureList[1] = PortalOwner->CrosshairTextureList["OrangeFilled"];
+        PortalOwner->ReplaceActiveCrosshairTexture(PortalOwner->GetCrosshairTexture("OrangeFilled"), 1);
     }
 
     // tell myself that I have a wife (existent or non-existent)
@@ -445,11 +445,11 @@ void AQLPortal::UnsetPortal()
     // set up crosshair
     if (PortalType == EPortalType::Blue && PortalOwner)
     {
-        PortalOwner->CurrentCrosshairTextureList[0] = PortalOwner->CrosshairTextureList["BlueEmpty"];
+        PortalOwner->ReplaceActiveCrosshairTexture(PortalOwner->GetCrosshairTexture("BlueEmpty"), 0);
     }
     else if (PortalType == EPortalType::Orange && PortalOwner)
     {
-        PortalOwner->CurrentCrosshairTextureList[1] = PortalOwner->CrosshairTextureList["OrangeEmpty"];
+        PortalOwner->ReplaceActiveCrosshairTexture(PortalOwner->GetCrosshairTexture("OrangeEmpty"), 1);
     }
 
     if (Spouse)

@@ -24,6 +24,7 @@ class QL_API AQLWeaponPortalGun : public AQLWeapon
     GENERATED_BODY()
 public:
     AQLWeaponPortalGun();
+    virtual void BeginPlay() override;
     virtual void Fire() override;
     virtual void AltFire() override;
     void CreatePortal(EPortalType PortalType);
@@ -49,4 +50,7 @@ protected:
     AQLPortal* BluePortal;
     AQLPortal* OrangePortal;
     bool bCanZoomIn;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++Property")
+    TSubclassOf<AQLPortal> PortalSubclass;
 };

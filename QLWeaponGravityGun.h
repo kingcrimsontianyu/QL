@@ -26,6 +26,7 @@ class QL_API AQLWeaponGravityGun : public AQLWeapon
     GENERATED_BODY()
 public:
     AQLWeaponGravityGun();
+    virtual void BeginPlay() override;
     virtual void Fire() override;
     virtual void AltFire() override;
     virtual void AltFireReleased() override;

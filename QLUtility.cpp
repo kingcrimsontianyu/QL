@@ -37,6 +37,13 @@ namespace QLUtility
 
     //------------------------------------------------------------
     //------------------------------------------------------------
+    void QLWarning(const FString& string)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, string);
+    }
+
+    //------------------------------------------------------------
+    //------------------------------------------------------------
     void PlaySoundComponent(TMap<FName, UAudioComponent*>& SoundComponentList, const FName& SoundName)
     {
         bool Found = false;
@@ -55,7 +62,7 @@ namespace QLUtility
 
         if (!Found)
         {
-            QLUtility::QLSay("sound not found.");
+            QLUtility::QLWarning("sound not found.");
         }
     }
 
@@ -95,7 +102,7 @@ namespace QLUtility
 
         if (!Found)
         {
-            QLUtility::QLSay("sound not found.");
+            QLUtility::QLWarning("sound not found.");
         }
     }
 }

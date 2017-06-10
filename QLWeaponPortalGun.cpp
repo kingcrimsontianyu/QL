@@ -18,18 +18,7 @@ AQLWeaponPortalGun::AQLWeaponPortalGun()
 {
     PrimaryActorTick.bCanEverTick = true;
     Name = "PortalGun";
-    CrosshairTextureList.Add("BlueEmpty", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Internal/portal_gun_crosshair_blue_empty_processed")));
-    CrosshairTextureList.Add("BlueFilled", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Internal/portal_gun_crosshair_blue_filled_processed")));
-    CrosshairTextureList.Add("OrangeEmpty", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Internal/portal_gun_crosshair_orange_empty_processed")));
-    CrosshairTextureList.Add("OrangeFilled", CreateCrosshairTexture(TEXT("/Game/Blueprints/Weapon/PortalGun/Internal/portal_gun_crosshair_orange_filled_processed")));
-
-    InitializeCurrentCrosshairTexture("BlueEmpty");
-    InitializeCurrentCrosshairTexture("OrangeEmpty");
-
-    // sound
-    //SoundComponentList.Add("None", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/bottle"), TEXT("SoundNoneComp")));
-    //SoundComponentList.Add("Fire", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/portal_created"), TEXT("SoundFireComp")));
-    //SoundComponentList.Add("Zoom", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/zoom_in"), TEXT("SoundZoomComp")));
+    PortalSubclass = AQLPortal::StaticClass();
 
     BluePortal = nullptr;
     OrangePortal = nullptr;
@@ -43,6 +32,16 @@ AQLWeaponPortalGun::AQLWeaponPortalGun()
     ZoomTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("ZoomTimeline"));
     ZoomTimelineInterpFunction.BindUFunction(this, FName{TEXT("ZoomCallback")});
     bCanZoomIn = true;
+}
+
+//------------------------------------------------------------
+// Called when the game starts or when spawned
+//------------------------------------------------------------
+void AQLWeaponPortalGun::BeginPlay()
+{
+    Super::BeginPlay();
+    AddActiveCrosshairTexture("BlueEmpty");
+    AddActiveCrosshairTexture("OrangeEmpty");
 }
 
 //------------------------------------------------------------
@@ -107,7 +106,7 @@ void AQLWeaponPortalGun::CreatePortal(EPortalType PortalType)
             FRotator rotation = UKismetMathLibrary::MakeRotFromXZ(Hit.Normal, pgcActor->GetActorUpVector());
             FTransform transform(FRotator::ZeroRotator);
 
-            AQLPortal* Portal = GetWorld()->SpawnActorDeferred<AQLPortal>(AQLPortal::StaticClass(), transform);
+            AQLPortal* Portal = GetWorld()->SpawnActorDeferred<AQLPortal>(PortalSubclass, transform);
             Portal->SetQLOwner(this);
             // budge the portal so that it only overlaps the wall a wee bit
             // to allow decal display
