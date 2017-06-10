@@ -17,8 +17,8 @@ namespace QLUtility
     void QLSay(const FString& string, const float time);
 
     void PlaySoundComponent(TMap<FName, UAudioComponent*>& SoundComponentList, const FName& SoundName);
-    void PlaySoundFireAndForget(UObject* World,
-        TMap<FName, USoundWave*>& SoundWaveList,
+    void PlaySoundFireAndForget(UWorld* World,
+        TMap<FName, USoundWave*>& FireAndForgetSoundList,
         const FName& SoundName,
         const FVector& Location,
         USoundAttenuation* SoundAttenuation);

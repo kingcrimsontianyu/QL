@@ -23,13 +23,13 @@ AQLActor::AQLActor()
     QLOwner = nullptr;
     StaticMeshComponent = nullptr;
 
-    SoundNoAttenuation = CreateDefaultSubobject<USoundAttenuation>(TEXT("SoundNoAttenuation"));
-    SoundNoAttenuation->Attenuation.bAttenuate = false;
+    //SoundNoAttenuation = CreateDefaultSubobject<USoundAttenuation>(TEXT("SoundNoAttenuation"));
+    //SoundNoAttenuation->Attenuation.bAttenuate = false;
 
-    SoundAttenuation = CreateDefaultSubobject<USoundAttenuation>(TEXT("SoundAttenuation"));
-    SoundAttenuation->Attenuation.bAttenuate = true;
-    SoundAttenuation->Attenuation.bSpatialize = true;
-    SoundAttenuation->Attenuation.SpatializationAlgorithm = ESoundSpatializationAlgorithm::SPATIALIZATION_Default;
+    //SoundAttenuation = CreateDefaultSubobject<USoundAttenuation>(TEXT("SoundAttenuation"));
+    //SoundAttenuation->Attenuation.bAttenuate = true;
+    //SoundAttenuation->Attenuation.bSpatialize = true;
+    //SoundAttenuation->Attenuation.SpatializationAlgorithm = ESoundSpatializationAlgorithm::SPATIALIZATION_Default;
 }
 
 //------------------------------------------------------------
@@ -38,6 +38,16 @@ AQLActor::AQLActor()
 void AQLActor::BeginPlay()
 {
     Super::BeginPlay();
+
+    for (auto It = SoundComponentAssetList.CreateConstIterator(); It; ++It)
+    {
+        CreateSoundComponent(It->Key, It->Value);
+    }
+
+    for (auto It = FireAndForgetSoundAssetList.CreateConstIterator(); It; ++It)
+    {
+        CreateFireAndForgetSound(It->Key, It->Value);
+    }
 }
 
 //------------------------------------------------------------
@@ -78,74 +88,70 @@ void AQLActor::PlaySoundComponent(const FName& SoundName)
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLActor::PlaySoundFireAndForget(const FName& SoundName, const FVector& Location)
+void AQLActor::PlaySoundFireAndForget(const FName& SoundName)
 {
     QLUtility::PlaySoundFireAndForget(this->GetWorld(),
-        FireAndForgetSoundWaveList,
+        FireAndForgetSoundList,
         SoundName,
-        Location,
+        GetActorLocation(),
         SoundAttenuation);
 }
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLActor::PlaySoundFireAndForgetFromGameMode(const FName& SoundName)
+UAudioComponent* AQLActor::CreateSoundComponent(FName SoundName, TAssetPtr<USoundWave> SoundWaveAsset)
 {
-    AGameModeBase* GameModeBase = UGameplayStatics::GetGameMode(GetWorld());
-    if (GameModeBase)
+    FSoundResult Result;
+    UQLGameInstance* QLGameInstance = Cast<UQLGameInstance>(GetGameInstance());
+    if (QLGameInstance)
     {
-        AQLGameModeBase* QLGameModeBase = Cast<AQLGameModeBase>(GameModeBase);
-        if (QLGameModeBase)
-        {
-            QLGameModeBase->PlaySoundFireAndForget(SoundName);
-        }
-    }
-}
-
-//------------------------------------------------------------
-// note: ConstructorHelpers::FObjectFinder<T> and
-// CreateDefaultSubobject<T> can only be used inside ctor!!!
-//------------------------------------------------------------
-UAudioComponent* AQLActor::CreateSoundComponent(USceneComponent*& RootComponent_ext, const TCHAR* soundPath, const TCHAR* soundName)
-{
-    ConstructorHelpers::FObjectFinder<USoundWave> soundWave(soundPath);
-    UAudioComponent* soundComp = CreateDefaultSubobject<UAudioComponent>(soundName);
-
-    bool success = false;
-    if (soundWave.Succeeded() && soundComp)
-    {
-        soundComp->SetSound(soundWave.Object);
-        soundComp->SetupAttachment(RootComponent_ext);
-        soundComp->SetRelativeLocation(FVector(0.0f));
-        soundComp->bAutoActivate = false;
-        soundComp->AdjustAttenuation(SoundAttenuation->Attenuation);
-        success = true;
+        Result = QLGameInstance->AddToSoundWaveList(SoundWaveAsset);
     }
 
-    if (!success)
+    UAudioComponent* SoundComp = NewObject<UAudioComponent>(this, UAudioComponent::StaticClass());
+
+    if (Result.SoundWave && SoundComp)
     {
-        QLUtility::QLSay(TEXT("AQLActor::CreateSoundComponent() failed."));
-        soundComp = nullptr;
+        SoundComp->SetSound(Result.SoundWave);
+        SoundComp->SetupAttachment(RootComponent);
+        SoundComp->SetRelativeLocation(FVector(0.0f));
+        SoundComp->bAutoActivate = false;
+        //SoundComp->AdjustAttenuation(SoundAttenuation->Attenuation);
+        SoundComp->RegisterComponent(); // must occur after audio component is properly set up
+
+        SoundComponentList.Add(SoundName, SoundComp);
     }
 
-    return soundComp;
+    if (!Result.bNew)
+    {
+        QLUtility::QLSay("Asset of " + SoundName.ToString() + " is not new.");
+    }
+
+    return SoundComp;
 }
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-USoundWave* AQLActor::CreateFireAndForgetSoundWave(const TCHAR* SoundPath, const TCHAR* SoundName)
+USoundWave* AQLActor::CreateFireAndForgetSound(FName SoundName, TAssetPtr<USoundWave> SoundWaveAsset)
 {
-    ConstructorHelpers::FObjectFinder<USoundWave> SoundWaveObj(SoundPath);
+    FSoundResult Result;
+    UQLGameInstance* QLGameInstance = Cast<UQLGameInstance>(GetGameInstance());
+    if (QLGameInstance)
+    {
+        Result = QLGameInstance->AddToSoundWaveList(SoundWaveAsset);
+    }
 
-    if (SoundWaveObj.Succeeded())
+    if (Result.SoundWave)
     {
-        return SoundWaveObj.Object;
+        FireAndForgetSoundList.Add(SoundName, Result.SoundWave);
     }
-    else
+
+    if (!Result.bNew)
     {
-        QLUtility::QLSay(TEXT("CreateFireAndForgetSoundWave() failed."));
-        return nullptr;
+        QLUtility::QLSay("Asset of " + SoundName.ToString() + " is not new.");
     }
+
+    return Result.SoundWave;
 }
 
 //------------------------------------------------------------
@@ -153,26 +159,4 @@ USoundWave* AQLActor::CreateFireAndForgetSoundWave(const TCHAR* SoundPath, const
 UStaticMeshComponent*& AQLActor::GetStaticMeshComponent()
 {
     return StaticMeshComponent;
-}
-
-//------------------------------------------------------------
-//------------------------------------------------------------
-void AQLActor::AddSoundComponentToList(FName SoundName, UAudioComponent* SoundComponent)
-{
-    if (SoundComponent)
-    {
-        SoundComponent->SetupAttachment(RootComponent);
-        SoundComponent->SetRelativeLocation(FVector(0.0f));
-        SoundComponentList.Add(SoundName, SoundComponent);
-    }
-}
-
-//------------------------------------------------------------
-//------------------------------------------------------------
-void AQLActor::AddFireAndForgetSoundWaveToList(FName SoundName, USoundWave* SoundWave)
-{
-    if (SoundWave)
-    {
-        FireAndForgetSoundWaveList.Add(SoundName, SoundWave);
-    }
 }

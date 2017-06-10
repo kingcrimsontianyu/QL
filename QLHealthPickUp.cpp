@@ -29,7 +29,7 @@ AQLHealthPickUp::AQLHealthPickUp()
     BoxComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
     // sound
-    FireAndForgetSoundWaveList.Add("Consume", CreateFireAndForgetSoundWave(TEXT("/Game/Sounds/bite"), TEXT("HealthPickUpConsume")));
+    //FireAndForgetSoundWaveList.Add("Consume", CreateFireAndForgetSoundWave(TEXT("/Game/Sounds/bite"), TEXT("HealthPickUpConsume")));
 
     // built-in dynamic delegate
     this->OnActorBeginOverlap.AddDynamic(this, &AQLHealthPickUp::OnOverlapBeginForActor);
@@ -61,7 +61,7 @@ void AQLHealthPickUp::OnOverlapBeginForActor(AActor* OverlappedActor, AActor* Ot
         // increase health only when necessary
         if (character->IncrementHealth(Increment))
         {
-            PlaySoundFireAndForget("Consume", character->GetActorLocation());
+            PlaySoundFireAndForget("Consume");
             this->Destroy();
         }
     }

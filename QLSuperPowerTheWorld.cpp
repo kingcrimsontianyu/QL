@@ -23,8 +23,8 @@ AQLSuperPowerTheWorld::AQLSuperPowerTheWorld()
     PrimaryActorTick.bCanEverTick = true;
 
     // sound
-    SoundComponentList.Add("ExecuteTheWorld", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/za_warudo"), TEXT("SoundCompExecuteTheWorld")));
-    SoundComponentList.Add("Expire", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/expire"), TEXT("SoundCompExpire")));
+    //SoundComponentList.Add("ExecuteTheWorld", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/za_warudo"), TEXT("SoundCompExecuteTheWorld")));
+    //SoundComponentList.Add("Expire", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/expire"), TEXT("SoundCompExpire")));
 
     // halo
     static ConstructorHelpers::FObjectFinder<UCurveFloat> FCurveObj(TEXT("/Game/Blueprints/SuperPower/TheWorld/Internal/C_QLTheWorldHaloCurve"));

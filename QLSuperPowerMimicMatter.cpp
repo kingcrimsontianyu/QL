@@ -57,8 +57,8 @@ AQLSuperPowerMimicMatter::AQLSuperPowerMimicMatter()
     SuperPowerDynamicMaterial = nullptr;
 
     // sound
-    FireAndForgetSoundWaveList.Add("Start", CreateFireAndForgetSoundWave(TEXT("/Game/Sounds/za_warudo"), TEXT("SoundCompStart")));
-    FireAndForgetSoundWaveList.Add("End", CreateFireAndForgetSoundWave(TEXT("/Game/Sounds/error_wooden"), TEXT("SoundCompEnd")));
+    //FireAndForgetSoundWaveList.Add("Start", CreateFireAndForgetSoundWave(TEXT("/Game/Sounds/za_warudo"), TEXT("SoundCompStart")));
+    //FireAndForgetSoundWaveList.Add("End", CreateFireAndForgetSoundWave(TEXT("/Game/Sounds/error_wooden"), TEXT("SoundCompEnd")));
 }
 
 //------------------------------------------------------------
@@ -202,7 +202,7 @@ void AQLSuperPowerMimicMatter::StopSuperPower()
     if (SuperPowerOwner && MyPawn)
     {
         // apply sound
-        PlaySoundFireAndForget("End", SuperPowerOwner->GetActorLocation());
+        PlaySoundFireAndForget("End");
 
         SuperPowerOwner->SetActorRelativeScale3D(FVector(1.0f));
         Controller = MyPawn->GetController();
@@ -265,7 +265,7 @@ void AQLSuperPowerMimicMatter::DeflateCharacter()
     CharacterTimelineComp->PlayFromStart();
 
     // apply sound
-    PlaySoundFireAndForget("Start", SuperPowerOwner->GetActorLocation());
+    PlaySoundFireAndForget("Start");
 }
 
 //------------------------------------------------------------

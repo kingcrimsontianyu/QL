@@ -65,15 +65,12 @@ AQLCharacter::AQLCharacter()
     CurrentSuperPower = nullptr;
 
     // sound
-    SoundNoAttenuation = CreateDefaultSubobject<USoundAttenuation>(TEXT("SoundNoAttenuation"));
-    SoundNoAttenuation->Attenuation.bAttenuate = false;
-    SoundAttenuation = CreateDefaultSubobject<USoundAttenuation>(TEXT("SoundAttenuation"));
-    SoundAttenuation->Attenuation.bAttenuate = true;
-    SoundAttenuation->Attenuation.bSpatialize = true;
-    SoundAttenuation->Attenuation.SpatializationAlgorithm = ESoundSpatializationAlgorithm::SPATIALIZATION_Default;
-    SoundComponentList.Add("EquipWeapon", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/medshot4_from_hl2"), TEXT("SoundEquipWeaponComp")));
-    SoundComponentList.Add("SwitchWeapon", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/swords_collide"), TEXT("SoundSwitchWeaponComp")));
-    SoundComponentList.Add("DoubleJump", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/quake_jump"), TEXT("SoundDoubleJumpComp")));
+    //SoundNoAttenuation = CreateDefaultSubobject<USoundAttenuation>(TEXT("SoundNoAttenuation"));
+    //SoundNoAttenuation->Attenuation.bAttenuate = false;
+    //SoundAttenuation = CreateDefaultSubobject<USoundAttenuation>(TEXT("SoundAttenuation"));
+    //SoundAttenuation->Attenuation.bAttenuate = true;
+    //SoundAttenuation->Attenuation.bSpatialize = true;
+    //SoundAttenuation->Attenuation.SpatializationAlgorithm = ESoundSpatializationAlgorithm::SPATIALIZATION_Default;
 
     // post-process
     static ConstructorHelpers::FObjectFinder<UMaterial> SuperPowerTheWorldMaterialObj(TEXT("/Game/Blueprints/SuperPower/TheWorld/Internal/M_QLTheWorldHaloPP"));
@@ -103,6 +100,16 @@ void AQLCharacter::BeginPlay()
     //DebugHelper->SetActorRelativeLocation(FVector(200.0f, 0.0f, 0.0f));
 
     SuperPowerTheWorldDynamicMaterial = UMaterialInstanceDynamic::Create(SuperPowerTheWorldMaterial, this);
+
+    for (auto It = SoundComponentAssetList.CreateConstIterator(); It; ++It)
+    {
+        CreateSoundComponent(It->Key, It->Value);
+    }
+
+    for (auto It = FireAndForgetSoundAssetList.CreateConstIterator(); It; ++It)
+    {
+        CreateFireAndForgetSound(It->Key, It->Value);
+    }
 }
 
 //------------------------------------------------------------
@@ -717,59 +724,70 @@ void AQLCharacter::PlaySoundComponent(const FName& SoundName)
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLCharacter::PlaySoundFireAndForget(const FName& SoundName, const FVector& Location)
+void AQLCharacter::PlaySoundFireAndForget(const FName& SoundName)
 {
     QLUtility::PlaySoundFireAndForget(this->GetWorld(),
-        FireAndForgetSoundWaveList,
+        FireAndForgetSoundList,
         SoundName,
-        Location,
+        GetActorLocation(),
         SoundAttenuation);
 }
 
 //------------------------------------------------------------
-// note: ConstructorHelpers::FObjectFinder<T> and
-// CreateDefaultSubobject<T> can only be used inside ctor!!!
 //------------------------------------------------------------
-UAudioComponent* AQLCharacter::CreateSoundComponent(USceneComponent*& RootComponent_ext, const TCHAR* soundPath, const TCHAR* soundName)
+UAudioComponent* AQLCharacter::CreateSoundComponent(FName SoundName, TAssetPtr<USoundWave> SoundWaveAsset)
 {
-    ConstructorHelpers::FObjectFinder<USoundWave> soundWave(soundPath);
-    UAudioComponent* soundComp = CreateDefaultSubobject<UAudioComponent>(soundName);
-
-    bool success = false;
-    if (soundWave.Object->IsValidLowLevel() && soundComp)
+    FSoundResult Result;
+    UQLGameInstance* QLGameInstance = Cast<UQLGameInstance>(GetGameInstance());
+    if (QLGameInstance)
     {
-        soundComp->SetSound(soundWave.Object);
-        soundComp->SetupAttachment(RootComponent_ext);
-        soundComp->SetRelativeLocation(FVector(0.0f));
-        soundComp->bAutoActivate = false;
-        soundComp->AdjustAttenuation(SoundAttenuation->Attenuation);
-        success = true;
+        Result = QLGameInstance->AddToSoundWaveList(SoundWaveAsset);
     }
 
-    if (!success)
+    UAudioComponent* SoundComp = NewObject<UAudioComponent>(this, UAudioComponent::StaticClass());
+
+    if (Result.SoundWave && SoundComp)
     {
-        QLUtility::QLSay(TEXT("AQLActor::CreateSoundComponent() failed."));
-        soundComp = nullptr;
+        SoundComp->SetSound(Result.SoundWave);
+        SoundComp->SetupAttachment(RootComponent);
+        SoundComp->SetRelativeLocation(FVector(0.0f));
+        SoundComp->bAutoActivate = false;
+        //SoundComp->AdjustAttenuation(SoundAttenuation->Attenuation);
+        SoundComp->RegisterComponent(); // must occur after audio component is properly set up
+
+        SoundComponentList.Add(SoundName, SoundComp);
     }
 
-    return soundComp;
+    if (!Result.bNew)
+    {
+        QLUtility::QLSay(SoundName.ToString() + " is not new.");
+    }
+
+    return SoundComp;
 }
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-USoundWave* AQLCharacter::CreateFireAndForgetSoundWave(const TCHAR* SoundPath, const TCHAR* SoundName)
+USoundWave* AQLCharacter::CreateFireAndForgetSound(FName SoundName, TAssetPtr<USoundWave> SoundWaveAsset)
 {
-    ConstructorHelpers::FObjectFinder<USoundWave> SoundWaveObj(SoundPath);
+    FSoundResult Result;
+    UQLGameInstance* QLGameInstance = Cast<UQLGameInstance>(GetGameInstance());
+    if (QLGameInstance)
+    {
+        Result = QLGameInstance->AddToSoundWaveList(SoundWaveAsset);
+    }
 
-    if (SoundWaveObj.Object->IsValidLowLevel())
+    if (Result.SoundWave)
     {
-        return SoundWaveObj.Object;
+        FireAndForgetSoundList.Add(SoundName, Result.SoundWave);
     }
-    else
+
+    if (!Result.bNew)
     {
-        QLUtility::QLSay(TEXT("CreateFireAndForgetSoundWave() failed."));
-        return nullptr;
+        QLUtility::QLSay(SoundName.ToString() + " is not new.");
     }
+
+    return Result.SoundWave;
 }
 
 //------------------------------------------------------------

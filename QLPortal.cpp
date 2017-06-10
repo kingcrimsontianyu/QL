@@ -22,7 +22,7 @@ AQLPortal::AQLPortal()
     Spouse = nullptr;
 
     // sound
-    FireAndForgetSoundWaveList.Add("Teleport", CreateFireAndForgetSoundWave(TEXT("/Game/Sounds/teleport"), TEXT("SoundTeleportFireAndForget")));
+    //FireAndForgetSoundWaveList.Add("Teleport", CreateFireAndForgetSoundWave(TEXT("/Game/Sounds/teleport"), TEXT("SoundTeleportFireAndForget")));
 
     BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("RootComponent"));
     RootComponent = BoxComponent;

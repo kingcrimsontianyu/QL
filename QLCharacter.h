@@ -11,6 +11,7 @@
 #pragma once
 
 #include "QLUtility.h"
+#include "QLGameInstance.h"
 #include "QLDebugHelper.h"
 #include "QLWeaponGravityGun.h"
 #include "QLWeaponPortalGun.h"
@@ -142,10 +143,9 @@ public:
 
     AQLSuperPower* GetCurrentSuperPower() const;
 
-    UAudioComponent* CreateSoundComponent(USceneComponent*& RootComponent, const TCHAR* soundPath, const TCHAR* soundName);
-    USoundWave* CreateFireAndForgetSoundWave(const TCHAR* SoundPath, const TCHAR* SoundName);
     void PlaySoundComponent(const FName& SoundName);
-    void PlaySoundFireAndForget(const FName& SoundName, const FVector& Location);
+
+    void PlaySoundFireAndForget(const FName& SoundName);
 
     void Test();
     UPhysicsHandleComponent* PhysicsHandle;
@@ -193,8 +193,21 @@ protected:
     TMap<FString, AActor*> Inventory;
     USoundAttenuation* SoundNoAttenuation;
     USoundAttenuation* SoundAttenuation;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++Property")
+    TMap<FName, TAssetPtr<USoundWave>> SoundComponentAssetList;
+
     TMap<FName, UAudioComponent*> SoundComponentList;
-    TMap<FName, USoundWave*> FireAndForgetSoundWaveList;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++Property")
+    TMap<FName, TAssetPtr<USoundWave>> FireAndForgetSoundAssetList;
+
+    TMap<FName, USoundWave*> FireAndForgetSoundList;
+
+    UAudioComponent* CreateSoundComponent(FName SoundName, TAssetPtr<USoundWave> SoundWaveAsset);
+
+    USoundWave* CreateFireAndForgetSound(FName SoundName, TAssetPtr<USoundWave> SoundWaveAsset);
+
     UCameraComponent* QLCameraComponent;
     AQLDebugHelper* DebugHelper;
 

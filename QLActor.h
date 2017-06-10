@@ -11,6 +11,7 @@
 #pragma once
 
 #include "QLUtility.h"
+#include "QLGameInstance.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "QLActor.generated.h"
@@ -29,9 +30,7 @@ public:
     AActor* GetQLOwner();
 
     void PlaySoundComponent(const FName& SoundName);
-    void PlaySoundFireAndForget(const FName& SoundName, const FVector& Location);
-
-    void PlaySoundFireAndForgetFromGameMode(const FName& SoundName);
+    void PlaySoundFireAndForget(const FName& SoundName);
 
     //UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Box component")
     //UBoxComponent* BoxComponent;
@@ -46,18 +45,16 @@ protected:
     USoundAttenuation* SoundAttenuation;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++Property")
+    TMap<FName, TAssetPtr<USoundWave>> SoundComponentAssetList;
+
     TMap<FName, UAudioComponent*> SoundComponentList;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++Property")
-    TMap<FName, USoundWave*> FireAndForgetSoundWaveList;
+    TMap<FName, TAssetPtr<USoundWave>> FireAndForgetSoundAssetList;
 
-    UAudioComponent* CreateSoundComponent(USceneComponent*& RootComponent_ext, const TCHAR* soundPath, const TCHAR* soundName);
+    TMap<FName, USoundWave*> FireAndForgetSoundList;
 
-    USoundWave* CreateFireAndForgetSoundWave(const TCHAR* SoundPath, const TCHAR* SoundName);
+    UAudioComponent* CreateSoundComponent(FName SoundName, TAssetPtr<USoundWave> SoundWaveAsset);
 
-    UFUNCTION(BlueprintCallable, Category = "C++Function")
-    void AddSoundComponentToList(FName SoundName, UAudioComponent* SoundComponent);
-
-    UFUNCTION(BlueprintCallable, Category = "C++Function")
-    void AddFireAndForgetSoundWaveToList(FName SoundName, USoundWave* SoundWave);
+    USoundWave* CreateFireAndForgetSound(FName SoundName, TAssetPtr<USoundWave> SoundWaveAsset);
 };

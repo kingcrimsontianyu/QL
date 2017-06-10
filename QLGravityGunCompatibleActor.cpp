@@ -41,9 +41,6 @@ AQLGravityGunCompatibleActor::AQLGravityGunCompatibleActor()
         this->StaticMeshComponent->SetMaterial(0, Material.Object);
     }
 
-    // sound
-    SoundComponentList.Add("Collision", CreateSoundComponent(RootComponent, TEXT("/Game/Sounds/ggca_collision"), TEXT("GGCACollision")));
-
     // built-in dynamic delegate
     StaticMeshComponent->OnComponentHit.AddDynamic(this, &AQLGravityGunCompatibleActor::OnComponentHitQL);
 }

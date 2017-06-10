@@ -25,9 +25,6 @@ AQLWeaponRecyclerGrenade::AQLWeaponRecyclerGrenade()
     PostProcessComp = nullptr;
     PostProcessMaterial = nullptr;
     PostProcessDynamicMaterial = nullptr;
-
-    // sound
-    FireAndForgetSoundWaveList.Add("Annihilate", CreateFireAndForgetSoundWave(TEXT("/Game/Sounds/laser"), TEXT("SoundCompAnnihilate")));
 }
 
 //------------------------------------------------------------
@@ -60,12 +57,10 @@ void AQLWeaponRecyclerGrenade::Tick( float DeltaTime )
 //------------------------------------------------------------
 void AQLWeaponRecyclerGrenade::FireReleased()
 {
-    PlaySoundFireAndForgetFromGameMode("biubiu");
-
     if (SphereComponent)
     {
         // apply sound
-        PlaySoundFireAndForget("Countdown", GetActorLocation());
+        PlaySoundFireAndForget("Countdown");
 
         const float ThrowRange = 10000.0f;
         UCameraComponent* CameraComp = WeaponOwner->GetQLCameraComponent();
@@ -162,7 +157,7 @@ void AQLWeaponRecyclerGrenade::Attract()
 void AQLWeaponRecyclerGrenade::Annihilate()
 {
     // apply sound
-    PlaySoundFireAndForget("Annihilate", GetActorLocation());
+    PlaySoundFireAndForget("Annihilate");
 
     GetWorld()->GetTimerManager().ClearTimer(AttractTimerHandle);
 

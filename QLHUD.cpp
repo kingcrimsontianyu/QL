@@ -15,8 +15,6 @@
 //------------------------------------------------------------
 AQLHUD::AQLHUD()
 {
-    ConstructorHelpers::FObjectFinder<UTexture2D> CrosshairTextureObj(TEXT("/Game/Blueprints/PlayerUMG/Internal/default_crosshair"));
-    CrosshairTextureDefault = CrosshairTextureObj.Object;
 }
 
 //------------------------------------------------------------

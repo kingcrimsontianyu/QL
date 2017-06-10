@@ -9,6 +9,7 @@
 //----------------------------------------
 
 #include "QL.h"
+#include "QLGameInstance.h"
 #include "QLUtility.h"
 
 namespace QLUtility
@@ -38,17 +39,21 @@ namespace QLUtility
     //------------------------------------------------------------
     void PlaySoundComponent(TMap<FName, UAudioComponent*>& SoundComponentList, const FName& SoundName)
     {
+        bool Found = false;
         if (SoundComponentList.Contains(SoundName))
         {
-            UAudioComponent* soundComp = SoundComponentList[SoundName];
+            UAudioComponent* SoundComp = SoundComponentList[SoundName];
 
             // allow sound pile-up
-            if (soundComp)
+            if (SoundComp)
             {
-                soundComp->Play();
+                Found = true;
+                QLUtility::QLSay(SoundName.ToString());
+                SoundComp->Play(0.0f);
             }
         }
-        else
+
+        if (!Found)
         {
             QLUtility::QLSay("sound not found.");
         }
@@ -57,19 +62,23 @@ namespace QLUtility
     //------------------------------------------------------------
     // FIXME: play sound at location using gravity gun may crash the game
     //------------------------------------------------------------
-    void PlaySoundFireAndForget(UObject* World,
-                                TMap<FName, USoundWave*>& SoundWaveList,
+    void PlaySoundFireAndForget(UWorld* World,
+                                TMap<FName, USoundWave*>& FireAndForgetSoundList,
                                 const FName& SoundName,
                                 const FVector& Location,
                                 USoundAttenuation* SoundAttenuation)
     {
-        if (SoundWaveList.Contains(SoundName))
+        bool Found = false;
+        if (FireAndForgetSoundList.Contains(SoundName))
         {
-            USoundWave* SoundWave = SoundWaveList[SoundName];
+            USoundWave* SoundWave = FireAndForgetSoundList[SoundName];
 
             // allow sound pile-up
             if (SoundWave)
             {
+                Found = true;
+                QLUtility::QLSay(SoundName.ToString());
+
                 // FIXME: ATTENUATION CAUSES THE GAME TO CRASH RANDOMLY
                 //UGameplayStatics::PlaySoundAtLocation(World,
                 //    SoundWave,
@@ -80,14 +89,11 @@ namespace QLUtility
                 //    0.0f,
                 //    SoundAttenuation);
 
-                UGameplayStatics::PlaySound2D(World,
-                    SoundWave,
-                    1.0f,
-                    1.0f,
-                    0.0f);
+                UGameplayStatics::PlaySound2D(World, SoundWave);
             }
         }
-        else
+
+        if (!Found)
         {
             QLUtility::QLSay("sound not found.");
         }

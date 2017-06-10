@@ -25,7 +25,9 @@ public:
 
     void DrawDefaultCrosshair();
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++Property")
+    UTexture2D* CrosshairTextureDefault;
+
 protected:
     TArray<UTexture2D*> CrosshairTextureList;
-    UTexture2D* CrosshairTextureDefault;
 };
