@@ -1,0 +1,42 @@
+//----------------------------------------
+// Quarter Life
+//
+// GNU General Public License v3.0
+//
+//  (\-/)
+// (='.'=)
+// (")-(")o
+//----------------------------------------
+
+#pragma once
+
+#include "GameFramework/Pawn.h"
+#include "QLPawn.generated.h"
+
+UCLASS()
+class QL_API AQLPawn : public APawn
+{
+    GENERATED_BODY()
+
+public:
+    // Sets default values for this pawn's properties
+    AQLPawn();
+
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
+
+    // Called every frame
+    virtual void Tick( float DeltaSeconds ) override;
+
+    // Called to bind functionality to input
+    virtual void SetupPlayerInputComponent(UInputComponent* InputComponent_ext) override;
+
+    virtual void SetQLOwner(AActor* QLOwner_ext);
+
+    virtual void UnSetQLOwner();
+
+    AActor* GetQLOwner();
+
+protected:
+    AActor* QLOwner;
+};
