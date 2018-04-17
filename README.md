@@ -8,7 +8,7 @@ kingcrimsontianyu@gmail.com
 
 ## Introduction
 
-Quarter Life (QL) is a first-person adventure game and my personal side project. The underlying engine is Unreal (version 4.15.3). My inspiration comes from Half Life 2, Portal 1/2, Bioshock 1/2, Prey (2017), Witcher 3, Shadow Warrior 1/2, Unreal Tournament, Doom (2016) and Doom 3, Quake Champions.
+Quarter Life (QL) is a first-person adventure game and my personal side project. The underlying engine is Unreal (version 4.19.1). My inspiration comes from Half Life, Portal, Bioshock, Prey, Witcher, Shadow Warrior, Unreal Tournament, Doom and Quake.
 
 Game elements currently being implemented include
 + Weapon
@@ -25,7 +25,7 @@ This git repo contains C++ source codes that establish the main game mechanics. 
 
 ## Clip
 
-### Portal gun
+### Portal gun and gravity gun
 <a href="https://youtu.be/X8Xr5iMmvNs" target="_blank"><img src="http://i3.ytimg.com/vi/X8Xr5iMmvNs/hqdefault.jpg" width="480" height="360" border="10" /></a>
 
 ### Za Warudo (the world)
@@ -33,3 +33,7 @@ This git repo contains C++ source codes that establish the main game mechanics. 
 
 ### Mimic Matter
 <a href="https://youtu.be/0v4UvpMDbvk" target="_blank"><img src="http://i3.ytimg.com/vi/0v4UvpMDbvk/hqdefault.jpg" width="480" height="360" border="10" /></a>
+
+### Recycler grenade
+<a href="https://youtu.be/0mBwfg12eWo" target="_blank"><img src="http://i3.ytimg.com/vi/0mBwfg12eWo/hqdefault.jpg" width="480" height="360" border="10" /></a>
+
