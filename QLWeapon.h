@@ -39,14 +39,14 @@ public:
     virtual void AltFireReleased() {};
     virtual void AltFireRepeat() {};
 
-    void AddActiveCrosshairTexture(const FName& Name);
+    void AddActiveCrosshairTexture(const FName& Name_ext);
     UTexture2D* CreateCrosshairTexture(const TCHAR* texturePath);
     const FName& GetWeaponName() const;
 
     UFUNCTION()
     void OnOverlapBeginForActor(AActor* OverlappedActor, AActor* OtherActor);
 
-    virtual void SetQLOwner(AActor* QLOwner) override;
+    virtual void SetQLOwner(AActor* QLOwner_ext) override;
     virtual void UnSetQLOwner() override;
     AQLCharacter* GetWeaponOwner();
     virtual void ResetWeapon() {};
@@ -55,7 +55,7 @@ public:
 
     const TArray<UTexture2D*>& GetActiveCrosshairTextureList() const;
 
-    UTexture2D* GetCrosshairTexture(const FName& Name) const;
+    UTexture2D* GetCrosshairTexture(const FName& Name_ext) const;
 
     void ReplaceActiveCrosshairTexture(UTexture2D* CrosshairTexture, int Index);
 protected:

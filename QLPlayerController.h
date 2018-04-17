@@ -42,12 +42,24 @@ public:
     // hold the widget after creation
     UQLPauseMenuWidget* PauseMenu;
 
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
     bool GetGamePaused();
+
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
     void PauseGame();
+
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
     void ResumeGame();
 
     UFUNCTION(BlueprintCallable, Category = "C++Function")
     float GetControlledPawnVelocityLength() const;
+
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
+    virtual void Tick(float DeltaSeconds) override;
+
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
+    float GetFramePerSecond() const;
 private:
     bool bGamePaused;
+    float framePerSecond;
 };

@@ -39,16 +39,16 @@ void AQLPawn::Tick( float DeltaTime )
 //------------------------------------------------------------
 // Called to bind functionality to input
 //------------------------------------------------------------
-void AQLPawn::SetupPlayerInputComponent(class UInputComponent* InputComponent)
+void AQLPawn::SetupPlayerInputComponent(UInputComponent* InputComponent_ext)
 {
-    Super::SetupPlayerInputComponent(InputComponent);
+    Super::SetupPlayerInputComponent(InputComponent_ext);
 }
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLPawn::SetQLOwner(AActor* QLOwner)
+void AQLPawn::SetQLOwner(AActor* QLOwner_ext)
 {
-    this->QLOwner = QLOwner;
+    this->QLOwner = QLOwner_ext;
 }
 
 //------------------------------------------------------------

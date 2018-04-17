@@ -49,10 +49,10 @@ void AQLWeapon::Tick( float DeltaTime )
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLWeapon::AddActiveCrosshairTexture(const FName& Name)
+void AQLWeapon::AddActiveCrosshairTexture(const FName& Name_ext)
 {
     bool bSuccess = false;
-    UTexture2D** valuePtr = CrosshairTextureList.Find(Name);
+    UTexture2D** valuePtr = CrosshairTextureList.Find(Name_ext);
     if (valuePtr)
     {
         UTexture2D* crosshairTexture = *valuePtr;
@@ -108,10 +108,10 @@ void AQLWeapon::OnOverlapBeginForActor(AActor* OverlappedActor, AActor* OtherAct
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLWeapon::SetQLOwner(AActor* QLOwner)
+void AQLWeapon::SetQLOwner(AActor* QLOwner_ext)
 {
-    Super::SetQLOwner(QLOwner);
-    this->WeaponOwner = Cast<AQLCharacter>(QLOwner);
+    Super::SetQLOwner(QLOwner_ext);
+    this->WeaponOwner = Cast<AQLCharacter>(QLOwner_ext);
 }
 
 //------------------------------------------------------------
@@ -138,9 +138,9 @@ const TArray<UTexture2D*>& AQLWeapon::GetActiveCrosshairTextureList() const
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-UTexture2D* AQLWeapon::GetCrosshairTexture(const FName& Name) const
+UTexture2D* AQLWeapon::GetCrosshairTexture(const FName& Name_ext) const
 {
-    UTexture2D* const* pTexture = CrosshairTextureList.Find(Name);
+    UTexture2D* const* pTexture = CrosshairTextureList.Find(Name_ext);
     if (pTexture)
     {
         return *pTexture;

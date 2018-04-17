@@ -203,7 +203,7 @@ void AQLWeaponGravityGun::AltFire()
                         DeltaRotation.Normalize();
 
                         // physical handle grabs the component
-                        WeaponOwner->PhysicsHandle->GrabComponent(comp, Hit.BoneName, Hit.Location, true);
+                        WeaponOwner->PhysicsHandle->GrabComponentAtLocationWithRotation(comp, Hit.BoneName, Hit.Location, comp->GetComponentRotation());
 
                         // set logical ownership
                         WeaponOwner->AddToInventory(ggcActor);

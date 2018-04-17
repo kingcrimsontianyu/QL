@@ -29,7 +29,7 @@ void UQLPlayGameMenuWidget::Play()
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void UQLPlayGameMenuWidget::SetPlayerController(AQLPlayerController* PlayerController)
+void UQLPlayGameMenuWidget::SetPlayerController(AQLPlayerController* PlayerController_ext)
 {
-    this->PlayerController = PlayerController;
+    this->PlayerController = PlayerController_ext;
 }

@@ -67,9 +67,9 @@ void AQLSuperPowerMimicMatterPawn::Tick( float DeltaTime )
 //------------------------------------------------------------
 // Called to bind functionality to input
 //------------------------------------------------------------
-void AQLSuperPowerMimicMatterPawn::SetupPlayerInputComponent(class UInputComponent* InputComponent)
+void AQLSuperPowerMimicMatterPawn::SetupPlayerInputComponent(UInputComponent* InputComponent_ext)
 {
-    Super::SetupPlayerInputComponent(InputComponent);
+    Super::SetupPlayerInputComponent(InputComponent_ext);
 
     InputComponent->BindAxis("MoveForward", this, &AQLSuperPowerMimicMatterPawn::MoveForward);
     InputComponent->BindAxis("MoveRight", this, &AQLSuperPowerMimicMatterPawn::MoveRight);
@@ -150,10 +150,10 @@ void AQLSuperPowerMimicMatterPawn::StopSuperPower()
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLSuperPowerMimicMatterPawn::SetMimicActor(AActor* MimicActor, UStaticMeshComponent* MimicComp)
+void AQLSuperPowerMimicMatterPawn::SetMimicActor(AActor* MimicActor_ext, UStaticMeshComponent* MimicComp_ext)
 {
-    this->MimicActor = MimicActor;
-    this->MimicComp = MimicComp;
+    this->MimicActor = MimicActor_ext;
+    this->MimicComp = MimicComp_ext;
 
     // calculate impulse to be applied to the component
     ImpulseValue = MimicComp->GetMass() * InstantSpeed;

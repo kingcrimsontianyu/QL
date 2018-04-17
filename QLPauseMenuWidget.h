@@ -44,7 +44,7 @@ public:
     UFUNCTION(BlueprintCallable, Category = "C++Function")
     virtual void ReturnToMainMenu();
 
-    void SetPlayerController(AQLPlayerController* PlayerController);
+    void SetPlayerController(AQLPlayerController* PlayerController_ext);
 private:
     AQLPlayerController* PlayerController;
 };

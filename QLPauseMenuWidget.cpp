@@ -37,7 +37,7 @@ void UQLPauseMenuWidget::ReturnToMainMenu()
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void UQLPauseMenuWidget::SetPlayerController(AQLPlayerController* PlayerController)
+void UQLPauseMenuWidget::SetPlayerController(AQLPlayerController* PlayerController_ext)
 {
-    this->PlayerController = PlayerController;
+    this->PlayerController = PlayerController_ext;
 }

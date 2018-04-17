@@ -32,7 +32,7 @@ public:
     virtual void Tick( float DeltaSeconds ) override;
 
     // Called to bind functionality to input
-    virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
+    virtual void SetupPlayerInputComponent(UInputComponent* InputComponent_ext) override;
 
     void MoveForward(float Val);
 
@@ -44,7 +44,7 @@ public:
 
     void StopSuperPower();
 
-    void SetMimicActor(AActor* MimicActor, UStaticMeshComponent* MimicComp);
+    void SetMimicActor(AActor* MimicActor_ext, UStaticMeshComponent* MimicComp_ext);
 
     void UnsetMimicActor();
 

@@ -29,9 +29,9 @@ public:
     virtual void Tick( float DeltaSeconds ) override;
 
     // Called to bind functionality to input
-    virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
+    virtual void SetupPlayerInputComponent(UInputComponent* InputComponent_ext) override;
 
-    virtual void SetQLOwner(AActor* QLOwner);
+    virtual void SetQLOwner(AActor* QLOwner_ext);
 
     virtual void UnSetQLOwner();
 

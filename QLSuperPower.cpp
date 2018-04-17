@@ -50,10 +50,10 @@ const FName& AQLSuperPower::GetSuperPowerName() const
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLSuperPower::SetQLOwner(AActor* QLOwner)
+void AQLSuperPower::SetQLOwner(AActor* QLOwner_ext)
 {
-    Super::SetQLOwner(QLOwner);
-    this->SuperPowerOwner = Cast<AQLCharacter>(QLOwner);
+    Super::SetQLOwner(QLOwner_ext);
+    this->SuperPowerOwner = Cast<AQLCharacter>(QLOwner_ext);
 }
 
 //------------------------------------------------------------

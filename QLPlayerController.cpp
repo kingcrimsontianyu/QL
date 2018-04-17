@@ -22,6 +22,20 @@ AQLPlayerController::AQLPlayerController()
 
 //------------------------------------------------------------
 //------------------------------------------------------------
+void AQLPlayerController::Tick(float DeltaSeconds)
+{
+    framePerSecond = 1.0 / DeltaSeconds;
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+float AQLPlayerController::GetFramePerSecond() const
+{
+    return framePerSecond;
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
 void AQLPlayerController::SetupInputComponent()
 {
     Super::SetupInputComponent();
@@ -78,7 +92,7 @@ void AQLPlayerController::PauseGame()
         bGamePaused = true;
         bShowMouseCursor = true;
         FInputModeGameAndUI InputMode;
-        InputMode.SetLockMouseToViewport(true);
+        InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
         SetInputMode(InputMode);
         this->SetPause(true);
 

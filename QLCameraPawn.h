@@ -46,7 +46,7 @@ public:
 
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
-    virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
+    virtual void SetupPlayerInputComponent(UInputComponent* InputComponent_ext) override;
 
     // Called every frame
     virtual void Tick( float DeltaSeconds ) override;

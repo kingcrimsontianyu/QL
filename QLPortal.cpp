@@ -254,13 +254,14 @@ void AQLPortal::OnOverlapBeginForActor(AActor* OverlappedActor, AActor* OtherAct
             }
 
             // step 4: change controller/camera direction
-            FVector CameraForwardDirection = QLCharacter->GetController()->GetActorForwardVector();
+
+            FVector CameraForwardDirection = QLCharacter->GetQLCameraComponent()->GetForwardVector();
             CameraForwardDirection = PortalRotationInverse.RotateVector(CameraForwardDirection);
             CameraForwardDirection.X = -CameraForwardDirection.X;
             CameraForwardDirection.Y = -CameraForwardDirection.Y;
             FVector NewCameraForwardDirection = PortalNewRotation.RotateVector(CameraForwardDirection);
 
-            FVector CameraUpDirection = QLCharacter->GetController()->GetActorUpVector();
+            FVector CameraUpDirection = QLCharacter->GetQLCameraComponent()->GetUpVector();
             CameraUpDirection = PortalRotationInverse.RotateVector(CameraUpDirection);
             CameraUpDirection.X = -CameraUpDirection.X;
             CameraUpDirection.Y = -CameraUpDirection.Y;
@@ -309,10 +310,10 @@ void AQLPortal::OnOverlapEndForActor(AActor* OverlappedActor, AActor* OtherActor
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLPortal::SetQLOwner(AActor* QLOwner)
+void AQLPortal::SetQLOwner(AActor* QLOwner_ext)
 {
-    Super::SetQLOwner(QLOwner);
-    this->PortalOwner = Cast<AQLWeaponPortalGun>(QLOwner);
+    Super::SetQLOwner(QLOwner_ext);
+    this->PortalOwner = Cast<AQLWeaponPortalGun>(QLOwner_ext);
 }
 
 //------------------------------------------------------------
@@ -332,12 +333,12 @@ AQLWeaponPortalGun* AQLPortal::GetPortalOwner()
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLPortal::SetSpouse(AQLPortal* Spouse)
+void AQLPortal::SetSpouse(AQLPortal* Spouse_ext)
 {
     // no self-marriage
-    if (this != Spouse)
+    if (this != Spouse_ext)
     {
-        this->Spouse = Spouse;
+        this->Spouse = Spouse_ext;
     }
 }
 
@@ -391,9 +392,9 @@ bool AQLPortal::IsInMyRoll(AActor* Actor)
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLPortal::SetPortal(EPortalType PortalType, AQLPortal* Spouse)
+void AQLPortal::SetPortal(EPortalType PortalType_ext, AQLPortal* Spouse_ext)
 {
-    this->PortalType = PortalType;
+    this->PortalType = PortalType_ext;
 
     // set up crosshair
     if (PortalType == EPortalType::Blue && PortalOwner)
@@ -406,7 +407,7 @@ void AQLPortal::SetPortal(EPortalType PortalType, AQLPortal* Spouse)
     }
 
     // tell myself that I have a wife (existent or non-existent)
-    SetSpouse(Spouse);
+    SetSpouse(Spouse_ext);
 
     // if my wife exists, tell her that she has a husband: me
     if (Spouse)

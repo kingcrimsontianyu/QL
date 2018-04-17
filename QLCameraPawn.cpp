@@ -62,9 +62,9 @@ void AQLCameraPawn::Tick( float DeltaTime )
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLCameraPawn::SetupPlayerInputComponent(class UInputComponent* InputComponent)
+void AQLCameraPawn::SetupPlayerInputComponent(UInputComponent* InputComponent_ext)
 {
-    Super::SetupPlayerInputComponent(InputComponent);
+    Super::SetupPlayerInputComponent(InputComponent_ext);
 }
 
 //------------------------------------------------------------

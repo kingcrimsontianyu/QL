@@ -42,6 +42,7 @@ FSoundResult UQLGameInstance::AddToSoundWaveList(TAssetPtr<USoundWave> SoundWave
     // if asset is not found, load the sound
     else
     {
+        bool bManageActiveHandle = true;
         UObject* ResultObj = PersistentData.StreamableManager.SynchronousLoad(SoundWaveAsset.ToStringReference());
         if (ResultObj)
         {
