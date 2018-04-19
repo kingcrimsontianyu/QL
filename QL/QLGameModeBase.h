@@ -14,12 +14,11 @@
 #include "QLCharacter.h"
 #include "QLPlayerController.h"
 #include "QLHUD.h"
-#include "QLUtility.h"
 #include "GameFramework/GameMode.h"
 #include "QLGameModeBase.generated.h"
 
 UCLASS()
-class QL_API AQLGameModeBase : public AGameMode
+class QL_API AQLGameModeBase : public AGameModeBase
 {
     GENERATED_BODY()
 

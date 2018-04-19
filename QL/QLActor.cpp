@@ -9,6 +9,7 @@
 //----------------------------------------
 
 #include "QL.h"
+#include "QLUtility.h"
 #include "QLActor.h"
 #include "QLGameModeBase.h"
 
@@ -124,7 +125,7 @@ UAudioComponent* AQLActor::CreateSoundComponent(FName SoundName, TAssetPtr<USoun
 
     if (!Result.bNew)
     {
-        QLUtility::QLSay("Asset of " + SoundName.ToString() + " is not new.");
+        // QLUtility::QLSay("Asset of " + SoundName.ToString() + " is not new.");
     }
 
     return SoundComp;
@@ -148,7 +149,7 @@ USoundWave* AQLActor::CreateFireAndForgetSound(FName SoundName, TAssetPtr<USound
 
     if (!Result.bNew)
     {
-        QLUtility::QLSay("Asset of " + SoundName.ToString() + " is not new.");
+        // QLUtility::QLSay("Asset of " + SoundName.ToString() + " is not new.");
     }
 
     return Result.SoundWave;

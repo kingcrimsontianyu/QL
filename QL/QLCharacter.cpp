@@ -9,6 +9,7 @@
 //----------------------------------------
 
 #include "QL.h"
+#include "QLUtility.h"
 #include "QLCharacter.h"
 
 //------------------------------------------------------------
@@ -18,8 +19,12 @@ AQLCharacter::AQLCharacter()
 {
     Health = 25.0f;
     MaxHealth = 100.0f;
-    Chi = 30.0f;
+    HealthPercent = Health / MaxHealth;
+
+    Chi = 25.0f;
     MaxChi = 100.0f;
+    ChiPercent = Chi / MaxChi;
+    
     bCanDoubleJump = false;
     bIsFalling = false;
 
@@ -33,14 +38,14 @@ AQLCharacter::AQLCharacter()
     PrimaryActorTick.bCanEverTick = true;
 
     // movement
-    GetCharacterMovement()->JumpZVelocity = 600.0f;
+    GetCharacterMovement()->JumpZVelocity = 400.0f;
     GetCharacterMovement()->AirControl = 0.0f;
     GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
-    MaxWalkSpeed = 600.0f;
+    MaxWalkSpeed = 650.0f;
     GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
     MaxWalkSpeedCrouched = 100.0f;
     GetCharacterMovement()->MaxWalkSpeedCrouched = MaxWalkSpeedCrouched;
-    //GetCharacterMovement()->MaxStepHeight = 100.0f;
+    GetCharacterMovement()->MaxStepHeight = 50.0f;
 
     // camera
     // note pawn has a member var: BaseEyeHeight
@@ -760,7 +765,7 @@ UAudioComponent* AQLCharacter::CreateSoundComponent(FName SoundName, TAssetPtr<U
 
     if (!Result.bNew)
     {
-        QLUtility::QLSay(SoundName.ToString() + " is not new.");
+        // QLUtility::QLSay(SoundName.ToString() + " is not new.");
     }
 
     return SoundComp;
@@ -784,7 +789,7 @@ USoundWave* AQLCharacter::CreateFireAndForgetSound(FName SoundName, TAssetPtr<US
 
     if (!Result.bNew)
     {
-        QLUtility::QLSay(SoundName.ToString() + " is not new.");
+        // QLUtility::QLSay(SoundName.ToString() + " is not new.");
     }
 
     return Result.SoundWave;
@@ -840,9 +845,23 @@ float AQLCharacter::GetHealth() const
 
 //------------------------------------------------------------
 //------------------------------------------------------------
+float AQLCharacter::GetHealthPercent() const
+{
+    return HealthPercent;
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
 float AQLCharacter::GetChi() const
 {
     return Chi;
+}
+
+//------------------------------------------------------------
+//------------------------------------------------------------
+float AQLCharacter::GetChiPercent() const
+{
+    return ChiPercent;
 }
 
 //------------------------------------------------------------
@@ -858,10 +877,12 @@ bool AQLCharacter::IncrementHealth_Implementation(float increment)
     else
     {
         Health += increment;
+        HealthPercent = Health / MaxHealth;
 
         if (Health > MaxHealth)
         {
             Health = MaxHealth;
+            HealthPercent = 1.0f;
         }
 
         if (Health <= 0.0f)
@@ -885,15 +906,18 @@ bool AQLCharacter::IncrementChi_Implementation(float increment)
     else
     {
         Chi += increment;
+        ChiPercent = Chi / MaxChi;
 
         if (Chi > MaxChi)
         {
             Chi = MaxChi;
+            ChiPercent = 1.0f;
         }
 
         if (Chi <= 0.0f)
         {
             Chi = 0.0f;
+            ChiPercent = 0.0f;
         }
 
         return true;

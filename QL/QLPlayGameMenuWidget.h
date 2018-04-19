@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include "QLUtility.h"
 #include "Blueprint/UserWidget.h"
 #include "QLPlayGameMenuWidget.generated.h"
 

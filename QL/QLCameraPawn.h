@@ -11,7 +11,6 @@
 #pragma once
 
 #include "Components/SplineComponent.h"
-#include "QLUtility.h"
 #include "QLDebugHelper.h"
 #include "GameFramework/Pawn.h"
 #include "QLCameraPawn.generated.h"

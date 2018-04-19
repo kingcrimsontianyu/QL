@@ -36,7 +36,7 @@ public:
     float GetChiIncrement();
 
     UFUNCTION(BlueprintCallable, Category = "C++Function")
-    void SetChiIncrement(float Increment_ext);
+    void SetChiIncrement(const float Increment_ext);
 
 protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++Property")

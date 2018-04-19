@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include "QLUtility.h"
 #include "QLCharacter.h"
 #include "GameFramework/HUD.h"
 #include "QLHUD.generated.h"

@@ -66,7 +66,7 @@ float AQLHealthPickUp::GetHealthIncrement()
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLHealthPickUp::SetHealthIncrement(float Increment_ext)
+void AQLHealthPickUp::SetHealthIncrement(const float Increment_ext)
 {
     Increment = Increment_ext;
 }

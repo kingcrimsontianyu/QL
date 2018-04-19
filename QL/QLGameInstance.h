@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include "QLUtility.h"
 #include "Engine/GameInstance.h"
 #include "QLGameInstance.generated.h"
 

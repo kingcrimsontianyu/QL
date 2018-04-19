@@ -37,7 +37,7 @@ public:
     float GetHealthIncrement();
 
     UFUNCTION(BlueprintCallable, Category = "C++Function")
-    void SetHealthIncrement(float Increment_ext);
+    void SetHealthIncrement(const float Increment_ext);
 
 protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "C++Property")

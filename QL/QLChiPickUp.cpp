@@ -66,7 +66,7 @@ float AQLChiPickUp::GetChiIncrement()
 
 //------------------------------------------------------------
 //------------------------------------------------------------
-void AQLChiPickUp::SetChiIncrement(float Increment_ext)
+void AQLChiPickUp::SetChiIncrement(const float Increment_ext)
 {
     Increment = Increment_ext;
 }

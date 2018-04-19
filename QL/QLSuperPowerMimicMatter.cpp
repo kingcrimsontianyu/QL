@@ -12,6 +12,7 @@
 #include "QLCharacter.h"
 #include "QLSuperPowerMimicMatter.h"
 #include "QLSuperPowerMimicMatterPawn.h"
+#include "QLUtility.h"
 
 //------------------------------------------------------------
 // Sets default values

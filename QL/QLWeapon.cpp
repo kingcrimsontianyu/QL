@@ -11,6 +11,7 @@
 #include "QL.h"
 #include "QLWeapon.h"
 #include "QLCharacter.h"
+#include "QLUtility.h"
 
 //------------------------------------------------------------
 // Sets default values

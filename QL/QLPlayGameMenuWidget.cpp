@@ -11,6 +11,7 @@
 #include "QL.h"
 #include "QLPlayerController.h"
 #include "QLPlayGameMenuWidget.h"
+#include "QLUtility.h"
 
 //------------------------------------------------------------
 //------------------------------------------------------------

@@ -12,6 +12,7 @@
 #include "QLPortal.h"
 #include "QLCharacter.h"
 #include "QLWeaponPortalGun.h"
+#include "QLUtility.h"
 
 //------------------------------------------------------------
 //------------------------------------------------------------

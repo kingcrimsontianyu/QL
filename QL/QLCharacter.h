@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include "QLUtility.h"
 #include "QLGameInstance.h"
 #include "QLDebugHelper.h"
 #include "QLWeaponGravityGun.h"
@@ -157,7 +156,13 @@ public:
     float GetHealth() const;
 
     UFUNCTION(BlueprintCallable, Category = "C++Function")
+    float GetHealthPercent() const;
+
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
     float GetChi() const;
+
+    UFUNCTION(BlueprintCallable, Category = "C++Function")
+    float GetChiPercent() const;
 
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "C++Function")
     bool IncrementHealth(float increment); // xxx_Implementation() version is automatically declared
@@ -179,12 +184,18 @@ protected:
     // bool bHaveSprintAbility; // whether player has gained the ability
     bool bIsSprinting; // whether player is sprinting
     bool bWantToSprint; // player wants to spring
+    
     float MaxWalkSpeed;
     float MaxWalkSpeedCrouched;
+    
     float Health;
     float MaxHealth;
+    float HealthPercent;
+
     float Chi;
     float MaxChi;
+    float ChiPercent;
+    
     AQLWeapon* CurrentWeapon;
     AQLWeapon* LastWeapon;
     TMap<FName, AQLWeapon*> WeaponList;
