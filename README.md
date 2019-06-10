@@ -1,4 +1,6 @@
-# Quarter Life
+# Quarter Life [DEPRECATED]
+
+**This repository is now deprecated, and the project redeveloped afresh. Please check the new repository: https://github.com/kingcrimsontianyu/QuarterLife**
 
 Tianyu Liu
 kingcrimsontianyu@gmail.com
